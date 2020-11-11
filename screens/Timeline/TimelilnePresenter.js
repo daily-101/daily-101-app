@@ -7,6 +7,8 @@ import * as Location from "expo-location";
 import axios from "axios";
 import { Alert } from "react-native";
 import Weather from "../../components/weather";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import moment from "moment";
 
 const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 
@@ -59,7 +61,21 @@ export default () => {
     const [isLoading, setIsLoading] = useState(true);
     const [condition, setCondition] = useState("");
     const [temp, setTemp] = useState("");
-    const [isDate, setIsDate] = useState(false);
+    const [date, setDate] = useState(new Date());
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
+
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
+
+    const handleConfirm = (date) => {
+        setDate(date);
+        hideDatePicker();
+    };
 
     const getWeather = async (latitude, longitude) => {
         const {
@@ -81,7 +97,7 @@ export default () => {
             const {
                 coords: { latitude, longitude },
             } = await Location.getCurrentPositionAsync();
-
+            console.log(latitude, longitude);
             getWeather(latitude, longitude);
         } catch (error) {
             Alert.alert("Can't find", "So sad");
@@ -130,14 +146,19 @@ export default () => {
         );
     };
 
-    const setDate = () => {
-        setIsDate((prev) => {
-            return !prev;
-        });
-    };
-
+    // const setDate = () => {
+    //     setIsDate((prev) => {
+    //         return !prev;
+    //     });
+    // };
     return (
         <>
+            <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+            />
             <Image
                 style={styles.userIcon}
                 source={{
@@ -146,11 +167,17 @@ export default () => {
                 }}
             />
             <View style={styles.topContainer}>
+                <Image
+                    style={styles.logo}
+                    source={require("../../img/logo.png")}
+                />
                 <TouchableOpacity
                     style={styles.dateContainer}
-                    onPress={setDate}
+                    onPress={showDatePicker}
                 >
-                    <Text style={styles.date}>2020.10.22</Text>
+                    <Text style={styles.date}>
+                        {moment(date).format("MMMM D, YYYY")}
+                    </Text>
                     <AntDesign
                         style={styles.underArrow}
                         name="down"
@@ -230,6 +257,13 @@ export default () => {
     );
 };
 const styles = StyleSheet.create({
+    logo: {
+        width: 90,
+        height: 25,
+        position: "absolute",
+        top: 20,
+        left: 160,
+    },
     userIcon: {
         width: 30,
         height: 30,
@@ -241,21 +275,24 @@ const styles = StyleSheet.create({
     dateContainer: {
         width: "100%",
         height: "100%",
+        flexDirection: "row",
+        // position: "absolute",
+        top: 80,
+        left: 20,
     },
     underArrow: {
-        position: "absolute",
-        top: 85,
-        left: 170,
+        top: 5,
+        left: 3,
     },
     weather: {
         position: "absolute",
         top: 20,
-        right: 70,
+        left: 20,
     },
     date: {
-        position: "absolute",
-        top: 80,
-        left: 25,
+        // position: "absolute",
+        // top: 80,
+        // left: 25,
         fontSize: 24,
         fontWeight: "bold",
     },
