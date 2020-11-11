@@ -6,6 +6,7 @@ import Diet from "../screens/Diet";
 import Spend from "../screens/Spend";
 import Timeline from "../screens/Timeline";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { Image } from "react-native";
 
 const Tabs = createBottomTabNavigator();
 
@@ -22,29 +23,34 @@ export default ({ navigation, route }) => {
             screenOptions={({ route }) => {
                 return {
                     tabBarIcon: ({ focused }) => {
-                        let iconName = "";
-                        if (route.name === "Timeline") iconName = "timeline";
-                        else if (route.name === "Activity")
-                            iconName = "directions-run";
-                        else if (route.name === "Spend")
-                            iconName = "monetization-on";
-                        else if (route.name === "Diet") iconName = "restaurant";
-
+                        let imgPath;
+                        if (route.name === "타임라인")
+                            imgPath = require("../img/bottom_tap/timeline.png");
+                        else if (route.name === "활동량")
+                            imgPath = require("../img/bottom_tap/activity.png");
+                        else if (route.name === "소비")
+                            imgPath = require("../img/bottom_tap/spend.png");
+                        else if (route.name === "식단")
+                            imgPath = require("../img/bottom_tap/diet.png");
                         return (
-                            <MaterialIcons
-                                name={iconName}
-                                color={focused ? "blue" : "grey"}
-                                size={26}
+                            <Image
+                                style={{ width: 25, height: 25 }}
+                                source={imgPath}
                             />
+                            // <MaterialIcons
+                            //     name={iconName}
+                            //     color={focused ? "blue" : "grey"}
+                            //     size={26}
+                            // />
                         );
                     },
                 };
             }}
         >
-            <Tabs.Screen name="Timeline" component={Timeline} />
-            <Tabs.Screen name="Activity" component={Activity} />
-            <Tabs.Screen name="Spend" component={Spend} />
-            <Tabs.Screen name="Diet" component={Diet} />
+            <Tabs.Screen name="타임라인" component={Timeline} />
+            <Tabs.Screen name="활동량" component={Activity} />
+            <Tabs.Screen name="식단" component={Diet} />
+            <Tabs.Screen name="소비" component={Spend} />
         </Tabs.Navigator>
     );
 };
