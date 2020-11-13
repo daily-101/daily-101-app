@@ -181,7 +181,7 @@ export default () => {
                     <AntDesign
                         style={styles.underArrow}
                         name="down"
-                        size={26}
+                        size={20}
                         color="black"
                     />
                 </TouchableOpacity>
@@ -276,12 +276,12 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         flexDirection: "row",
-        // position: "absolute",
-        top: 80,
-        left: 20,
+        justifyContent: "center",
+        alignItems: "center",
+        top: 12,
     },
     underArrow: {
-        top: 5,
+        top: 3,
         left: 3,
     },
     weather: {
@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
         // position: "absolute",
         // top: 80,
         // left: 25,
-        fontSize: 24,
+        fontSize: 18,
         fontWeight: "bold",
     },
     topContainer: {
