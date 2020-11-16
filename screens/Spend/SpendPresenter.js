@@ -93,7 +93,7 @@ export default () => {
             const {
                 coords: { latitude, longitude },
             } = await Location.getCurrentPositionAsync();
-            console.log(latitude, longitude);
+
             getWeather(latitude, longitude);
         } catch (error) {
             Alert.alert("Can't find", "So sad");

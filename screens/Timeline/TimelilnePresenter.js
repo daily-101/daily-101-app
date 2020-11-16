@@ -63,6 +63,23 @@ export default () => {
     const [temp, setTemp] = useState("");
     const [date, setDate] = useState(new Date());
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const [location, setLocation] = useState({});
+    const [timeline, setTimeline] = useState({
+        time: new Date(),
+        location: location,
+    });
+
+    // useEffect(() => {
+    //     (async () => {
+    //         let { status } = await Location.requestPermissionsAsync();
+    //         if (status !== "granted") {
+    //             setErrorMsg("Permission to access location was denied");
+    //         }
+
+    //         let location = await Location.getCurrentPositionAsync({});
+    //         setLocation(location);
+    //     })();
+    // }, []);
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -96,8 +113,10 @@ export default () => {
             await Location.requestPermissionsAsync();
             const {
                 coords: { latitude, longitude },
+                timestamp,
             } = await Location.getCurrentPositionAsync();
-            console.log(latitude, longitude);
+            // console.log(new Date(timestamp).getMinutes());
+            setLocation({ latitude, longitude });
             getWeather(latitude, longitude);
         } catch (error) {
             Alert.alert("Can't find", "So sad");
@@ -125,13 +144,9 @@ export default () => {
     const renderDetail = (rowData, sectionID, rowID) => {
         let title = <Text style={[styles.title]}>{rowData.title}</Text>;
         var desc = null;
-        if (rowData.description && rowData.imageUrl) {
+        if (rowData.description) {
             desc = (
                 <View style={styles.descriptionContainer}>
-                    {/* <Image
-                        source={{ uri: rowData.imageUrl }}
-                        style={styles.image}
-                    /> */}
                     <Text style={[styles.textDescription]}>
                         {rowData.description}
                     </Text>
