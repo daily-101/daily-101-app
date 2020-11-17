@@ -1,3 +1,3 @@
-import DietPresenter from "./DietPresenter";
+import DietContainer from "./DietContainer";
 
-export default DietPresenter;
+export default DietContainer;

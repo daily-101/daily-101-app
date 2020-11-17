@@ -47,10 +47,10 @@ export default ({ navigation, route }) => {
                 };
             }}
         >
-            <Tabs.Screen name="식단" component={Diet} />
             <Tabs.Screen name="타임라인" component={Timeline} />
-            <Tabs.Screen name="소비" component={Spend} />
             <Tabs.Screen name="활동량" component={Activity} />
+            <Tabs.Screen name="소비" component={Spend} />
+            <Tabs.Screen name="식단" component={Diet} />
         </Tabs.Navigator>
     );
 };
