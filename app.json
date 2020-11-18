@@ -19,6 +19,7 @@
         },
         "android": {
             "package": "com.daily101",
+            "googleServicesFile": "./google-services.json",
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"

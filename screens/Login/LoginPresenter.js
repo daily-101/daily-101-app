@@ -1,8 +1,53 @@
-import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, Image, StyleSheet, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import * as GoogleSignIn from "expo-google-sign-in";
 
 export default ({ navigation }) => {
+    const [user, setUser] = useState({});
+
+    const initAsync = async () => {
+        await GoogleSignIn.initAsync({
+            clientId:
+                "626752650215-9614q5uedogo96okooink83ibifa4i2k.apps.googleusercontent.com",
+        });
+        _syncUserWithStateAsync();
+    };
+    const _syncUserWithStateAsync = async () => {
+        const user = await GoogleSignIn.signInSilentlyAsync();
+        setUser(user);
+    };
+
+    const signOutAsync = async () => {
+        await GoogleSignIn.signOutAsync();
+        setUser(null);
+    };
+
+    const signInAsync = async () => {
+        try {
+            await GoogleSignIn.askForPlayServicesAsync();
+            const { type, user } = await GoogleSignIn.signInAsync();
+            if (type === "success") {
+                _syncUserWithStateAsync();
+            }
+        } catch ({ message }) {
+            alert("login: Error : " + message);
+        }
+    };
+
+    const onPress = () => {
+        console.log(user);
+        if (user) {
+            signOutAsync();
+        } else {
+            signInAsync();
+            navigation.navigate("Tabs");
+        }
+    };
+
+    useEffect(() => {
+        initAsync();
+    }, []);
     return (
         <View style={styles.loginContainer}>
             <Text style={styles.loginTitle}>생활밀착형 통합 관리 서비스</Text>
@@ -14,6 +59,7 @@ export default ({ navigation }) => {
                 style={styles.loginButton}
                 onPress={() => navigation.navigate("Tabs")}
             >
+                {/* onPress={onPress} */}
                 <Image
                     style={{ width: 23, height: 23 }}
                     source={require("../../img/google_logo.png")}
