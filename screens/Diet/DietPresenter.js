@@ -12,7 +12,7 @@ const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 
 const { height: HEIGHT } = Dimensions.get("window");
 
-export default () => {
+export default ({ user }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [condition, setCondition] = useState("");
     const [temp, setTemp] = useState("");

@@ -6,7 +6,7 @@ import Diet from "../screens/Diet";
 import Spend from "../screens/Spend";
 import Timeline from "../screens/Timeline";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import { Image } from "react-native";
+import { Alert, Image } from "react-native";
 
 const Tabs = createBottomTabNavigator();
 
@@ -22,7 +22,7 @@ export default ({ navigation, route }) => {
         <Tabs.Navigator
             screenOptions={({ route }) => {
                 return {
-                    tabBarIcon: ({ focused }) => {
+                    tabBarIcon: () => {
                         let imgPath;
                         if (route.name === "타임라인")
                             imgPath = require("../img/bottom_tap/timeline.png");
@@ -47,7 +47,7 @@ export default ({ navigation, route }) => {
                 };
             }}
         >
-            <Tabs.Screen name="타임라인" component={Timeline} />
+            <Tabs.Screen name="타임라인" in component={Timeline} />
             <Tabs.Screen name="활동량" component={Activity} />
             <Tabs.Screen name="소비" component={Spend} />
             <Tabs.Screen name="식단" component={Diet} />

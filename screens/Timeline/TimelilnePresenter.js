@@ -2,58 +2,57 @@ import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Dimensions, Image } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
 import { AntDesign } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import * as Location from "expo-location";
 import axios from "axios";
 import { Alert } from "react-native";
 import Weather from "../../components/weather";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
+import * as GoogleSignIn from "expo-google-sign-in";
 
 const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 
 const { height: HEIGHT } = Dimensions.get("window");
 
-export default () => {
+export default (props) => {
+    const { date, setDate, data, setData } = props;
+    const [addr, setAddr] = useState("");
+    const [cur, setCur] = useState({});
+
+    const current = async () => {
+        const user = await GoogleSignIn.getCurrentUser();
+        setCur(user);
+    };
+
+    const reverseGeo = async (lat, lng) => {
+        const addr = await axios
+            .get(
+                `https://maps.googleapis.com/maps/api/geocode/json?language=ko&latlng=${lat},${lng}&key=AIzaSyAnAqhQJoss5tYolzrzDD7kyQbaMUTtyuM`
+            )
+            .then(function (response) {
+                setAddr(response.data.results[0].formatted_address);
+                setIsAddress(true);
+            });
+        // return await Location.reverseGeocodeAsync({
+        //     latitude: Number(lat),
+        //     longitude: Number(lng),
+        // });
+    };
+
+    const convertData = data.map((s) => ({
+        time: moment(s.date).format("hh:mm"),
+        title: s.placeName,
+        description: "",
+        latitude: s.latitude,
+        longitude: s.longitude,
+    }));
+
     const tmpData = [
         {
             time: "09:00",
             title: "집",
             description: " ",
-            // lineColor: "#009688",
-            // icon: require("../img/archery.png"),
-            imageUrl:
-                "https://cloud.githubusercontent.com/assets/21040043/24240340/c0f96b3a-0fe3-11e7-8964-fe66e4d9be7a.jpg",
-        },
-        {
-            time: "10:45",
-            title: "스타벅스 정자역점",
-            description: "경기 성남시 분당구 성남대로 343번길 12-2",
-            // icon: require("../img/badminton.png"),
-            imageUrl:
-                "https://cloud.githubusercontent.com/assets/21040043/24240405/0ba41234-0fe4-11e7-919b-c3f88ced349c.jpg",
-        },
-        {
-            time: "12:00",
-            title: "직장",
-            // icon: require("../img/lunch.png"),
-        },
-        {
-            time: "14:00",
-            title: "족발의장인족장 분당정자점",
-            description: "경기 성남시 분당구 정자일로 156번길 6 뉴본타워",
-            // lineColor: "#009688",
-            // icon: require("../img/soccer.png"),
-            imageUrl:
-                "https://cloud.githubusercontent.com/assets/21040043/24240419/1f553dee-0fe4-11e7-8638-6025682232b1.jpg",
-        },
-        {
-            time: "16:30",
-            title: "집",
-            description: " ",
-            // icon: require("../img/dumbbell.png"),
-            imageUrl:
-                "https://cloud.githubusercontent.com/assets/21040043/24240422/20d84f6c-0fe4-11e7-8f1d-9dbc594d0cfa.jpg",
         },
     ];
 
@@ -61,13 +60,11 @@ export default () => {
     const [isLoading, setIsLoading] = useState(true);
     const [condition, setCondition] = useState("");
     const [temp, setTemp] = useState("");
-    const [date, setDate] = useState(new Date());
+    // const [date, setDate] = useState(new Date());
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [location, setLocation] = useState({});
-    const [timeline, setTimeline] = useState({
-        time: new Date(),
-        location: location,
-    });
+    const [isLocation, setIsLocation] = useState(false);
+    const [isAddress, setIsAddress] = useState(false);
 
     // useEffect(() => {
     //     (async () => {
@@ -117,25 +114,62 @@ export default () => {
             } = await Location.getCurrentPositionAsync();
             // console.log(new Date(timestamp).getMinutes());
             setLocation({ latitude, longitude });
+            setIsLocation(true);
+            reverseGeo(latitude, longitude);
             getWeather(latitude, longitude);
         } catch (error) {
             Alert.alert("Can't find", "So sad");
         }
     };
 
+    const getTimeline = async () => {
+        const data = await axios
+            .get(`http://210.107.78.156:9009/api/timeline/${date}`)
+            .then(function (response) {
+                setData(response.data);
+            });
+
+        // console.log(data.request._response);
+    };
+
     useEffect(() => {
         getLocation();
+        current();
+        // if (data.length > 0) printData();
     }, []);
 
     const onEventPress = (data) => {
         setSelected(data);
+        reverseGeo(data.latitude, data.longitude);
+    };
+
+    const submitLocation = () => {
+        getLocation();
+        if (isAddress && isLocation) {
+            // console.log("위치", location);
+            // console.log("주소", addr);
+            const newData = {
+                userId: 105324339913641718583,
+                placeName: addr,
+                latitude: location.latitude,
+                longitude: location.longitude,
+                distance: 0.0,
+            };
+            console.log(newData);
+            axios
+                .post("http://210.107.78.156:9009/api/timeline/", newData)
+                .then(function (response) {
+                    Alert.alert("현재위치가 등록되었습니다.");
+                })
+                .then(setData([...data, newData]));
+        }
     };
 
     const renderSelected = () => {
         if (selected) {
             return (
                 <Text style={{ marginTop: 10 }}>
-                    Selected event: {selected.title} at {selected.time}
+                    선택된 일정 : {selected.title} at {selected.time}
                 </Text>
             );
         }
@@ -172,6 +206,7 @@ export default () => {
                 isVisible={isDatePickerVisible}
                 mode="date"
                 onConfirm={handleConfirm}
+                date={date}
                 onCancel={hideDatePicker}
             />
             <Image
@@ -239,6 +274,20 @@ export default () => {
                     <Text>72,700원</Text>
                 </View>
             </View>
+            {/* <View style={styles.container}>
+                <Text>{data[2].placeName}</Text>
+                <ScrollView>
+                    {data.map((obj) => {
+                        return (
+                            <View key={obj.id}>
+                                <Text style={{ color: "black" }}>
+                                    {obj.placeName}
+                                </Text>
+                            </View>
+                        );
+                    })}
+                </ScrollView>
+            </View> */}
             <View style={styles.container}>
                 {renderSelected()}
                 <Timeline
@@ -263,15 +312,36 @@ export default () => {
                         style: { paddingTop: 5 },
                     }}
                     // innerCircle={"dot"}
-                    data={tmpData}
+                    data={convertData}
                     renderEvent={renderDetail}
                     onEventPress={onEventPress}
                 />
+                <TouchableOpacity
+                    style={styles.submitButton}
+                    onPress={submitLocation}
+                >
+                    <Text style={styles.submitText}>등록!</Text>
+                </TouchableOpacity>
+            </View>
+            <View>
+                <Text>{JSON.stringify(cur)}</Text>
             </View>
         </>
     );
 };
 const styles = StyleSheet.create({
+    submitText: {
+        color: "white",
+        textAlign: "center",
+    },
+    submitButton: {
+        marginLeft: 280,
+        width: 100,
+        height: 25,
+        lineHeight: 25,
+        borderRadius: 20,
+        backgroundColor: "rgb(202,216,228)",
+    },
     logo: {
         width: 90,
         height: 25,

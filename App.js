@@ -4,6 +4,8 @@ import * as Font from "expo-font";
 import React, { useState } from "react";
 import { Image, StatusBar } from "react-native";
 import Stack from "./navigation/Stack";
+import { Provider } from "mobx-react";
+import UserStore from "./Store/UserStore";
 
 const cacheImages = (images) =>
     images.map((image) => {
@@ -20,6 +22,10 @@ export default function App() {
     const [isReady, setIsReady] = useState(false);
     const loadAssets = () => {
         const images = cacheImages([
+            require("./assets/splash.png"),
+            require("./assets/adaptive-icon.png"),
+            require("./assets/icon.png"),
+            require("./assets/splash.png"),
             require("./img/bottom_tap/activity.png"),
             require("./img/bottom_tap/diet.png"),
             require("./img/bottom_tap/spend.png"),
@@ -36,7 +42,9 @@ export default function App() {
     return (
         <>
             <NavigationContainer>
-                <Stack />
+                <Provider UserStore={UserStore}>
+                    <Stack />
+                </Provider>
             </NavigationContainer>
             <StatusBar barStyle="ligth-content" />
         </>
