@@ -1,21 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, Image, StyleSheet, Alert } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import * as GoogleSignIn from "expo-google-sign-in";
 
 export default ({ navigation }) => {
     const [user, setUser] = useState({});
+    // const [isLogin, setLogin] = useState("로그인 안됨...");
+    // const [cur, setCur] = useState({});
+
+    // const current = async () => {
+    //     const user = await GoogleSignIn.getCurrentUser();
+    //     setCur(user);
+    // };
 
     const initAsync = async () => {
         await GoogleSignIn.initAsync({
             clientId:
-                "626752650215-9614q5uedogo96okooink83ibifa4i2k.apps.googleusercontent.com",
+                "626752650215-l163crvh5vc15t6ptj71ts5k0md99php.apps.googleusercontent.com   ",
+            // "626752650215-9614q5uedogo96okooink83ibifa4i2k.apps.googleusercontent.com",
         });
         _syncUserWithStateAsync();
     };
     const _syncUserWithStateAsync = async () => {
         const user = await GoogleSignIn.signInSilentlyAsync();
         setUser(user);
+        // onSetUser(user.toJSON())
+
+        // setUser(user);
     };
 
     const signOutAsync = async () => {
@@ -35,19 +46,24 @@ export default ({ navigation }) => {
         }
     };
 
-    const onPress = () => {
-        console.log(user);
+    const onPress = useCallback(() => {
+        // console.log("유저 데이터 ", userData);
         if (user) {
             signOutAsync();
+            // current();
+            //     setLogin("로그아웃");
         } else {
             signInAsync();
             navigation.navigate("Tabs");
+            // current();
+            //     setLogin("로그인");
         }
-    };
+    });
 
     useEffect(() => {
-        initAsync();
+        // initAsync();
     }, []);
+
     return (
         <View style={styles.loginContainer}>
             <Text style={styles.loginTitle}>생활밀착형 통합 관리 서비스</Text>
@@ -57,15 +73,21 @@ export default ({ navigation }) => {
             />
             <TouchableOpacity
                 style={styles.loginButton}
-                onPress={() => navigation.navigate("Tabs")}
+                // onPress={() => navigation.navigate("Tabs")}
+                onPress={onPress}
             >
-                {/* onPress={onPress} */}
                 <Image
                     style={{ width: 23, height: 23 }}
                     source={require("../../img/google_logo.png")}
                 />
                 <Text style={styles.buttonText}>google로 로그인하기</Text>
             </TouchableOpacity>
+
+            {/* <View>
+                <Text>
+                    {JSON.stringify(cur)}, {isLogin}
+                </Text>
+            </View> */}
         </View>
     );
 };
