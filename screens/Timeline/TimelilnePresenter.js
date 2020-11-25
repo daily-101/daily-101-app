@@ -2,28 +2,32 @@ import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Dimensions, Image } from "react-native";
 import Timeline from "react-native-timeline-flatlist";
 import { AntDesign } from "@expo/vector-icons";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+    ScrollView,
+    TextInput,
+    TouchableOpacity,
+} from "react-native-gesture-handler";
 import * as Location from "expo-location";
 import axios from "axios";
 import { Alert } from "react-native";
 import Weather from "../../components/weather";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
-import * as GoogleSignIn from "expo-google-sign-in";
 
 const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 
 const { height: HEIGHT } = Dimensions.get("window");
 
 export default (props) => {
-    const { date, setDate, data, setData } = props;
+    const { date, setDate, data, setData, uid } = props;
     const [addr, setAddr] = useState("");
-    const [cur, setCur] = useState({});
 
-    const current = async () => {
-        const user = await GoogleSignIn.getCurrentUser();
-        setCur(user);
-    };
+    // const [cur, setCur] = useState({});
+
+    // const current = async () => {
+    //     const user = await GoogleSignIn.getCurrentUser();
+    //     setCur(user);
+    // };
 
     const reverseGeo = async (lat, lng) => {
         const addr = await axios
@@ -41,26 +45,18 @@ export default (props) => {
     };
 
     const convertData = data.map((s) => ({
-        time: moment(s.date).format("hh:mm"),
-        title: s.placeName,
-        description: "",
+        id: s.id,
+        time: moment(s.date).format("kk:mm"),
+        title: s.title,
+        description: s.placeName,
         latitude: s.latitude,
         longitude: s.longitude,
     }));
-
-    const tmpData = [
-        {
-            time: "09:00",
-            title: "집",
-            description: " ",
-        },
-    ];
 
     const [selected, setSelected] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [condition, setCondition] = useState("");
     const [temp, setTemp] = useState("");
-    // const [date, setDate] = useState(new Date());
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [location, setLocation] = useState({});
     const [isLocation, setIsLocation] = useState(false);
@@ -122,19 +118,19 @@ export default (props) => {
         }
     };
 
-    const getTimeline = async () => {
-        const data = await axios
-            .get(`http://210.107.78.156:9009/api/timeline/${date}`)
-            .then(function (response) {
-                setData(response.data);
-            });
+    // const getTimeline = async () => {
+    //     const data = await axios
+    //         .get(`http://210.107.78.156:9009/api/timeline/${date}`)
+    //         .then(function (response) {
+    //             setData(response.data);
+    //         });
 
-        // console.log(data.request._response);
-    };
+    //     // console.log(data.request._response);
+    // };
 
     useEffect(() => {
         getLocation();
-        current();
+        // current();
         // if (data.length > 0) printData();
     }, []);
 
@@ -149,7 +145,8 @@ export default (props) => {
             // console.log("위치", location);
             // console.log("주소", addr);
             const newData = {
-                userId: 105324339913641718583,
+                userId: 105191400324450530000,
+                // userId: uid,
                 placeName: addr,
                 latitude: location.latitude,
                 longitude: location.longitude,
@@ -165,12 +162,38 @@ export default (props) => {
         }
     };
 
+    const [place, setPlace] = useState("");
+
+    const changePlace = (selected) => {
+        setData(
+            data.map((item) =>
+                item.id === selected.id ? { ...item, title: place } : item
+            )
+        );
+        setSelected(null);
+        setPlace("");
+    };
+
     const renderSelected = () => {
         if (selected) {
             return (
-                <Text style={{ marginTop: 10 }}>
-                    선택된 일정 : {selected.title} at {selected.time}
-                </Text>
+                // <Text style={{ marginTop: 10 }}>
+                //     선택된 일정 : {selected.title} at {selected.time}
+                // </Text>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.inputPlace}
+                        placeholder="장소를 입력해주세요!"
+                        onChangeText={(text) => setPlace(text)}
+                        value={place}
+                    />
+                    <TouchableOpacity
+                        onPress={() => changePlace(selected)}
+                        style={styles.inputButton}
+                    >
+                        <Text style={styles.inputText}>장소 입력</Text>
+                    </TouchableOpacity>
+                </View>
             );
         }
     };
@@ -195,11 +218,6 @@ export default (props) => {
         );
     };
 
-    // const setDate = () => {
-    //     setIsDate((prev) => {
-    //         return !prev;
-    //     });
-    // };
     return (
         <>
             <DateTimePickerModal
@@ -312,7 +330,7 @@ export default (props) => {
                         style: { paddingTop: 5 },
                     }}
                     // innerCircle={"dot"}
-                    data={convertData}
+                    data={data}
                     renderEvent={renderDetail}
                     onEventPress={onEventPress}
                 />
@@ -323,13 +341,37 @@ export default (props) => {
                     <Text style={styles.submitText}>등록!</Text>
                 </TouchableOpacity>
             </View>
-            <View>
-                <Text>{JSON.stringify(cur)}</Text>
-            </View>
+            {/* <View>
+                <Text>{uid}</Text>
+            </View> */}
         </>
     );
 };
 const styles = StyleSheet.create({
+    inputText: {
+        color: "white",
+        textAlign: "center",
+    },
+    inputButton: {
+        elevation: 5,
+        paddingTop: 8,
+        height: 40,
+        backgroundColor: "rgb(202,216,228)",
+        width: 80,
+        borderRadius: 16,
+        // marginLeft: 20,
+        // marginTop: 10,
+    },
+    inputPlace: {
+        borderRadius: 16,
+        borderWidth: 0.5,
+        height: 40,
+        paddingLeft: 15,
+        width: 280,
+    },
+    inputContainer: {
+        flexDirection: "row",
+    },
     submitText: {
         color: "white",
         textAlign: "center",
