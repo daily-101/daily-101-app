@@ -39,7 +39,7 @@ export default () => {
                 const convertData = response.data?.map((s) => ({
                     id: s.id,
                     time: moment(s.date).format("kk:mm"),
-                    title: s.title,
+                    title: s.address,
                     description: s.placeName,
                     latitude: s.latitude,
                     longitude: s.longitude,

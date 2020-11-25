@@ -70,6 +70,9 @@ export default () => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [selectedTab, setSelectedTab] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
+    const [place, setPlace] = useState("");
+    const [price, setPrice] = useState("");
+    const [tab, setTab] = useState("");
 
     const showCart = () => {
         setSelectedTab(false);
@@ -395,21 +398,19 @@ export default () => {
                                     ]}
                                     defaultValue="식비"
                                     containerStyle={{ height: 40, width: 100 }}
-                                    onChangeItem={(item) =>
-                                        console.log(item.label, item.value)
-                                    }
+                                    onChangeItem={(item) => setTab(item.value)}
                                 />
                                 <TextInput
                                     style={styles.inputPlace}
                                     placeholder="장소"
-                                    // onChangeText={(text) => setPlace(text)}
-                                    // value={place}
+                                    onChangeText={(text) => setPlace(text)}
+                                    value={place}
                                 />
                                 <TextInput
                                     style={styles.inputPrice}
                                     placeholder="가격"
-                                    // onChangeText={(text) => setPlace(text)}
-                                    // value={place}
+                                    onChangeText={(text) => setPrice(text)}
+                                    value={price}
                                 />
                             </View>
                             <TouchableOpacity
@@ -419,6 +420,7 @@ export default () => {
                                 }}
                                 onPress={() => {
                                     setModalVisible(!modalVisible);
+                                    console.log(tab, place, price);
                                 }}
                             >
                                 <Text style={styles.textStyle}>등록하기!</Text>

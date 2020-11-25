@@ -165,11 +165,28 @@ export default (props) => {
     const [place, setPlace] = useState("");
 
     const changePlace = (selected) => {
+        // console.log(selected);
         setData(
             data.map((item) =>
                 item.id === selected.id ? { ...item, title: place } : item
             )
         );
+
+        const modifyData = {
+            id: selected.id,
+            userId: 105191400324450530000,
+            address: place,
+            placeName: selected.description,
+            latitude: selected.latitude,
+            longitude: selected.longitude,
+            distance: 0.0,
+        };
+        axios
+            .put("http://210.107.78.156:9009/api/timeline/", modifyData)
+            .then(function (response) {
+                console.log("성공");
+            });
+
         setSelected(null);
         setPlace("");
     };
