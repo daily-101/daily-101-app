@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+    Dimensions,
+    Image,
+    Modal,
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+} from "react-native";
+import DropDownPicker from "react-native-dropdown-picker";
+import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
@@ -13,6 +22,14 @@ import { PieChart } from "react-native-chart-kit";
 const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 
 const { height: HEIGHT } = Dimensions.get("window");
+
+const dropdownData = [
+    { value: "식비" },
+    { value: "패션/미용" },
+    { value: "교육" },
+    { value: "문화생활" },
+    { value: "기타" },
+];
 
 const data = [
     {
@@ -52,6 +69,7 @@ export default () => {
     const [date, setDate] = useState(new Date());
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [selectedTab, setSelectedTab] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const showCart = () => {
         setSelectedTab(false);
@@ -329,10 +347,161 @@ export default () => {
                     </Text>
                 </TouchableOpacity>
             </View>
+            <View style={styles.submitContainer}>
+                <TouchableOpacity
+                    onPress={() => setModalVisible(true)}
+                    style={styles.submitButton}
+                >
+                    <Text style={styles.submitText}>등록</Text>
+                </TouchableOpacity>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    onRequestClose={() => {
+                        setModalVisible(false);
+                    }}
+                    visible={modalVisible}
+                >
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <View style={styles.modelInput}>
+                                <DropDownPicker
+                                    style={{
+                                        marginRight: 10,
+                                        borderTopLeftRadius: 10,
+                                        borderTopRightRadius: 10,
+                                        borderBottomLeftRadius: 10,
+                                        borderBottomRightRadius: 10,
+                                        backgroundColor: "#fafafa",
+                                    }}
+                                    dropDownStyle={{
+                                        borderBottomLeftRadius: 20,
+                                        borderBottomRightRadius: 20,
+                                        backgroundColor: "#fafafa",
+                                        elevation: 3,
+                                    }}
+                                    items={[
+                                        { label: "식비", value: "식비" },
+                                        {
+                                            label: "패션/미용",
+                                            value: "패션/미용",
+                                        },
+                                        { label: "교육", value: "교육" },
+                                        {
+                                            label: "문화생활",
+                                            value: "문화생활",
+                                        },
+                                        { label: "기타", value: "기타" },
+                                    ]}
+                                    defaultValue="식비"
+                                    containerStyle={{ height: 40, width: 100 }}
+                                    onChangeItem={(item) =>
+                                        console.log(item.label, item.value)
+                                    }
+                                />
+                                <TextInput
+                                    style={styles.inputPlace}
+                                    placeholder="장소"
+                                    // onChangeText={(text) => setPlace(text)}
+                                    // value={place}
+                                />
+                                <TextInput
+                                    style={styles.inputPrice}
+                                    placeholder="가격"
+                                    // onChangeText={(text) => setPlace(text)}
+                                    // value={place}
+                                />
+                            </View>
+                            <TouchableOpacity
+                                style={{
+                                    ...styles.openButton,
+                                    backgroundColor: "#2196F3",
+                                }}
+                                onPress={() => {
+                                    setModalVisible(!modalVisible);
+                                }}
+                            >
+                                <Text style={styles.textStyle}>등록하기!</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
         </>
     );
 };
 const styles = StyleSheet.create({
+    inputPrice: {
+        width: 100,
+        paddingLeft: 10,
+        borderWidth: 0.5,
+        borderRadius: 15,
+        marginLeft: 15,
+    },
+    inputPlace: {
+        width: 100,
+        paddingLeft: 10,
+        borderWidth: 0.5,
+        borderRadius: 15,
+    },
+    modelInput: {
+        flexDirection: "row",
+        marginBottom: 20,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22,
+    },
+    modalView: {
+        width: 350,
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    openButton: {
+        backgroundColor: "#F194FF",
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2,
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+    },
+    submitContainer: {
+        paddingBottom: 20,
+        backgroundColor: "white",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    submitText: {
+        color: "white",
+        textAlign: "center",
+    },
+    submitButton: {
+        width: 100,
+        height: 25,
+        lineHeight: 25,
+        borderRadius: 20,
+        backgroundColor: "rgb(202,216,228)",
+    },
     allText: {
         fontSize: 12,
     },

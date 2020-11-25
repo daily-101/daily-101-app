@@ -40,6 +40,7 @@ export default ({ navigation }) => {
             const { type, user } = await GoogleSignIn.signInAsync();
             if (type === "success") {
                 _syncUserWithStateAsync();
+                navigation.navigate("Tabs");
             }
         } catch ({ message }) {
             alert("login: Error : " + message);
@@ -47,17 +48,18 @@ export default ({ navigation }) => {
     };
 
     const onPress = useCallback(() => {
+        navigation.navigate("Tabs");
         // console.log("유저 데이터 ", userData);
-        if (user) {
-            signOutAsync();
-            // current();
-            //     setLogin("로그아웃");
-        } else {
-            signInAsync();
-            navigation.navigate("Tabs");
-            // current();
-            //     setLogin("로그인");
-        }
+        // if (user) {
+        //     signOutAsync();
+        //     // current();
+        //     //     setLogin("로그아웃");
+        // } else {
+        //     signInAsync();
+
+        //     // current();
+        //     //     setLogin("로그인");
+        // }
     });
 
     useEffect(() => {
