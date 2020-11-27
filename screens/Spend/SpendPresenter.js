@@ -23,56 +23,58 @@ const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 
 const { height: HEIGHT } = Dimensions.get("window");
 
-const dropdownData = [
-    { value: "식비" },
-    { value: "패션/미용" },
-    { value: "교육" },
-    { value: "문화생활" },
-    { value: "기타" },
-];
+export default (props) => {
+    const { date, setDate, spendData, setData, allCost, getSpendList } = props;
+    let totalCost = 0;
+    spendData.map((data) => (totalCost += Number(data.cost)));
 
-const data = [
-    {
-        name: "교육",
-        population: 825,
-        color: "#bee8e5",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15,
-    },
-    {
-        name: "패션/미용",
-        population: 68,
-        color: "#9ee4e7",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15,
-    },
-    {
-        name: "문화생활",
-        population: 61,
-        color: "#8dd5f5",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15,
-    },
-    {
-        name: "식비",
-        population: 44,
-        color: "#61c7ff",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15,
-    },
-];
+    const data = [
+        {
+            name: "식비",
+            population: allCost[0],
+            color: "#bee8e5",
+            legendFontColor: "#7F7F7F",
+            legendFontSize: 15,
+        },
+        {
+            name: "패션/미용",
+            population: allCost[1],
+            color: "#9ee4e7",
+            legendFontColor: "#7F7F7F",
+            legendFontSize: 15,
+        },
+        {
+            name: "교육",
+            population: allCost[2],
+            color: "#8dd5f5",
+            legendFontColor: "#7F7F7F",
+            legendFontSize: 15,
+        },
+        {
+            name: "문화생활",
+            population: allCost[3],
+            color: "#61c7ff",
+            legendFontColor: "#7F7F7F",
+            legendFontSize: 15,
+        },
+        {
+            name: "기타",
+            population: allCost[4],
+            color: "#61ccff",
+            legendFontColor: "#7F7F7F",
+            legendFontSize: 15,
+        },
+    ];
 
-export default () => {
     const [isLoading, setIsLoading] = useState(true);
     const [condition, setCondition] = useState("");
     const [temp, setTemp] = useState("");
-    const [date, setDate] = useState(new Date());
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [selectedTab, setSelectedTab] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
     const [place, setPlace] = useState("");
     const [price, setPrice] = useState("");
-    const [tab, setTab] = useState("");
+    const [tab, setTab] = useState("식비");
 
     const showCart = () => {
         setSelectedTab(false);
@@ -119,6 +121,25 @@ export default () => {
         } catch (error) {
             Alert.alert("Can't find", "So sad");
         }
+    };
+
+    const submitSpend = () => {
+        const postData = {
+            userId: 105191400324450530000,
+            // userId: uid,
+            category: tab,
+            spendName: place,
+            cost: price,
+        };
+        axios
+            .post("http://210.107.78.156:9003/api/spending/", postData)
+            .then(setData([...spendData, postData]))
+            .then(function (response) {
+                Alert.alert("소비내역이 등록되었습니다.");
+            })
+            .then(getSpendList())
+            .then(setModalVisible(!modalVisible));
+        // .then(setData([...data, newData]))
     };
 
     useEffect(() => {
@@ -173,99 +194,97 @@ export default () => {
                 <View style={styles.spendContainer}>
                     <View style={styles.totalContainer}>
                         <Text style={styles.spendText}>총 지출</Text>
-                        <Text style={styles.total}>727,100 원</Text>
+                        <Text style={styles.total}>
+                            {totalCost
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            원
+                        </Text>
                     </View>
                     <View style={styles.spendIndex}>
                         <Text style={styles.spendText}>내용</Text>
                         <Text style={styles.spendText}>금액</Text>
                     </View>
                     <ScrollView style={styles.spendScroll}>
-                        <View style={styles.spend}>
-                            <View style={styles.spendItem}>
-                                <Text style={styles.spendText}>스타벅스</Text>
+                        {spendData?.map((data) => (
+                            <View key={data.id} style={styles.spend}>
+                                <View style={styles.spendItem}>
+                                    <Text style={styles.spendText}>
+                                        {data.spendName}
+                                    </Text>
+                                    <Text
+                                        style={[
+                                            styles.spendText,
+                                            styles.spendCategory,
+                                        ]}
+                                    >
+                                        {data.category}
+                                    </Text>
+                                </View>
                                 <Text
-                                    style={[
-                                        styles.spendText,
-                                        styles.spendCategory,
-                                    ]}
+                                    style={[styles.spendText, styles.spendCash]}
                                 >
-                                    식비
+                                    {data?.cost
+                                        ?.toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                    원
                                 </Text>
                             </View>
-                            <Text style={[styles.spendText, styles.spendCash]}>
-                                6,100원
-                            </Text>
-                        </View>
-                        <View style={styles.spend}>
-                            <View style={styles.spendItem}>
-                                <Text style={styles.spendText}>
-                                    인터넷 쇼핑
-                                </Text>
-                                <Text
-                                    style={[
-                                        styles.spendText,
-                                        styles.spendCategory,
-                                    ]}
-                                >
-                                    패션/미용
-                                </Text>
-                            </View>
-                            <Text style={[styles.spendText, styles.spendCash]}>
-                                50,000원
-                            </Text>
-                        </View>
-                        <View style={styles.spend}>
-                            <View style={styles.spendItem}>
-                                <Text style={styles.spendText}>멀티캠퍼스</Text>
-                                <Text
-                                    style={[
-                                        styles.spendText,
-                                        styles.spendCategory,
-                                    ]}
-                                >
-                                    교육
-                                </Text>
-                            </View>
-                            <Text style={[styles.spendText, styles.spendCash]}>
-                                600,000원
-                            </Text>
-                        </View>
-                        <View style={styles.spend}>
-                            <View style={styles.spendItem}>
-                                <Text style={styles.spendText}>파파존스</Text>
-                                <Text
-                                    style={[
-                                        styles.spendText,
-                                        styles.spendCategory,
-                                    ]}
-                                >
-                                    식비
-                                </Text>
-                            </View>
-                            <Text style={[styles.spendText, styles.spendCash]}>
-                                26,100원
-                            </Text>
-                        </View>
-                        <View style={styles.spend}>
-                            <View style={styles.spendItem}>
-                                <Text style={styles.spendText}>예술의전당</Text>
-                                <Text
-                                    style={[
-                                        styles.spendText,
-                                        styles.spendCategory,
-                                    ]}
-                                >
-                                    문화생활
-                                </Text>
-                            </View>
-                            <Text style={[styles.spendText, styles.spendCash]}>
-                                46,000원
-                            </Text>
-                        </View>
+                        ))}
                     </ScrollView>
                 </View>
             ) : (
                 <View style={styles.spendContainer}>
+                    <View style={styles.indexContainer}>
+                        <View style={styles.indexItem}>
+                            <View
+                                style={[
+                                    styles.indexCircle,
+                                    { backgroundColor: "#61c7ff" },
+                                ]}
+                            />
+                            <Text>식비</Text>
+                        </View>
+                        <View style={styles.indexItem}>
+                            <View
+                                style={[
+                                    styles.indexCircle,
+                                    {
+                                        backgroundColor: "#9ee4e7",
+                                        borderRadius: 10,
+                                    },
+                                ]}
+                            />
+                            <Text>패션/미용</Text>
+                        </View>
+                        <View style={styles.indexItem}>
+                            <View
+                                style={[
+                                    styles.indexCircle,
+                                    { backgroundColor: "#bee8e5" },
+                                ]}
+                            />
+                            <Text>교육</Text>
+                        </View>
+                        <View style={styles.indexItem}>
+                            <View
+                                style={[
+                                    styles.indexCircle,
+                                    { backgroundColor: "#8dd5f5" },
+                                ]}
+                            />
+                            <Text>문화생활</Text>
+                        </View>
+                        <View style={styles.indexItem}>
+                            <View
+                                style={[
+                                    styles.indexCircle,
+                                    { backgroundColor: "#61ccff" },
+                                ]}
+                            />
+                            <Text>기타</Text>
+                        </View>
+                    </View>
                     <PieChart
                         style={{ paddingTop: 5 }}
                         data={data}
@@ -287,7 +306,7 @@ export default () => {
                         accessor="population"
                         backgroundColor="transparent"
                         absolute
-                        paddingLeft={100}
+                        paddingLeft={150}
                         hasLegend={false}
                     />
                     <View style={styles.allContainer}>
@@ -296,26 +315,81 @@ export default () => {
                             <Text>내용</Text>
                             <Text>금액</Text>
                         </View>
-                        <ScrollView>
+                        <ScrollView style={{ height: 150 }}>
                             <View style={styles.allItem}>
-                                <Text style={styles.allText}>82.5%</Text>
-                                <Text style={styles.allText}>교육</Text>
-                                <Text style={styles.allText}>600,000원</Text>
-                            </View>
-                            <View style={styles.allItem}>
-                                <Text style={styles.allText}>6.8%</Text>
-                                <Text style={styles.allText}>패션/미용</Text>
-                                <Text style={styles.allText}>50,000원</Text>
-                            </View>
-                            <View style={styles.allItem}>
-                                <Text style={styles.allText}>6.1%</Text>
-                                <Text style={styles.allText}>문화생활</Text>
-                                <Text style={styles.allText}>45,000원</Text>
-                            </View>
-                            <View style={styles.allItem}>
-                                <Text style={styles.allText}>4.4%</Text>
+                                <Text style={styles.allText}>
+                                    {((allCost[0] / totalCost) * 100).toFixed(
+                                        1
+                                    )}
+                                    %
+                                </Text>
                                 <Text style={styles.allText}>식비</Text>
-                                <Text style={styles.allText}>32,100원</Text>
+                                <Text style={styles.allText}>
+                                    {allCost[0]
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                    원
+                                </Text>
+                            </View>
+                            <View style={styles.allItem}>
+                                <Text style={styles.allText}>
+                                    {((allCost[1] / totalCost) * 100).toFixed(
+                                        1
+                                    )}
+                                    %
+                                </Text>
+                                <Text style={styles.allText}>패션/미용</Text>
+                                <Text style={styles.allText}>
+                                    {allCost[1]
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                    원
+                                </Text>
+                            </View>
+                            <View style={styles.allItem}>
+                                <Text style={styles.allText}>
+                                    {((allCost[2] / totalCost) * 100).toFixed(
+                                        1
+                                    )}
+                                    %
+                                </Text>
+                                <Text style={styles.allText}>교육</Text>
+                                <Text style={styles.allText}>
+                                    {allCost[2]
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                    원
+                                </Text>
+                            </View>
+                            <View style={styles.allItem}>
+                                <Text style={styles.allText}>
+                                    {((allCost[3] / totalCost) * 100).toFixed(
+                                        1
+                                    )}
+                                    %
+                                </Text>
+                                <Text style={styles.allText}>문화생활</Text>
+                                <Text style={styles.allText}>
+                                    {allCost[3]
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                    원
+                                </Text>
+                            </View>
+                            <View style={styles.allItem}>
+                                <Text style={styles.allText}>
+                                    {((allCost[4] / totalCost) * 100).toFixed(
+                                        1
+                                    )}
+                                    %
+                                </Text>
+                                <Text style={styles.allText}>기타</Text>
+                                <Text style={styles.allText}>
+                                    {allCost[4]
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                    원
+                                </Text>
                             </View>
                         </ScrollView>
                     </View>
@@ -370,7 +444,7 @@ export default () => {
                             <View style={styles.modelInput}>
                                 <DropDownPicker
                                     style={{
-                                        marginRight: 10,
+                                        // marginRight: 10,
                                         borderTopLeftRadius: 10,
                                         borderTopRightRadius: 10,
                                         borderBottomLeftRadius: 10,
@@ -378,10 +452,12 @@ export default () => {
                                         backgroundColor: "#fafafa",
                                     }}
                                     dropDownStyle={{
+                                        height: 200,
                                         borderBottomLeftRadius: 20,
                                         borderBottomRightRadius: 20,
                                         backgroundColor: "#fafafa",
-                                        elevation: 3,
+                                        elevation: 5,
+                                        paddingBottom: 10,
                                     }}
                                     items={[
                                         { label: "식비", value: "식비" },
@@ -397,7 +473,7 @@ export default () => {
                                         { label: "기타", value: "기타" },
                                     ]}
                                     defaultValue="식비"
-                                    containerStyle={{ height: 40, width: 100 }}
+                                    containerStyle={{ height: 50, width: 100 }}
                                     onChangeItem={(item) => setTab(item.value)}
                                 />
                                 <TextInput
@@ -418,10 +494,7 @@ export default () => {
                                     ...styles.openButton,
                                     backgroundColor: "#2196F3",
                                 }}
-                                onPress={() => {
-                                    setModalVisible(!modalVisible);
-                                    console.log(tab, place, price);
-                                }}
+                                onPress={submitSpend}
                             >
                                 <Text style={styles.textStyle}>등록하기!</Text>
                             </TouchableOpacity>
@@ -433,16 +506,33 @@ export default () => {
     );
 };
 const styles = StyleSheet.create({
+    indexContainer: {
+        position: "absolute",
+        top: 60,
+        left: 50,
+    },
+    indexCircle: {
+        width: 10,
+        height: 10,
+        borderRadius: 10,
+        marginTop: 4,
+        marginRight: 10,
+    },
+    indexItem: {
+        flexDirection: "row",
+        marginBottom: 3,
+    },
     inputPrice: {
         width: 100,
         paddingLeft: 10,
         borderWidth: 0.5,
         borderRadius: 15,
-        marginLeft: 15,
+        marginLeft: 10,
     },
     inputPlace: {
         width: 100,
         paddingLeft: 10,
+        marginLeft: 10,
         borderWidth: 0.5,
         borderRadius: 15,
     },

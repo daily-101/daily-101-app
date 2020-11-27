@@ -32,7 +32,7 @@ export default () => {
     const getTimeline = async () => {
         const data = await axios
             .get(
-                `http://210.107.78.156:9009/api/timeline/${date}/105191400324450530000`
+                `http://210.107.78.156:9001/api/timeline/${date}/105191400324450530000`
             )
             // .get(`http://210.107.78.156:9009/api/timeline/${date}/${cur.uid}`)
             .then(function (response) {
@@ -48,7 +48,6 @@ export default () => {
                 // console.log(response.data);
             });
     };
-    console.log("container", data);
     return (
         <TimelilnePresenter
             data={data}

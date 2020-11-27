@@ -144,7 +144,7 @@ export default (props) => {
         if (isAddress && isLocation) {
             // console.log("위치", location);
             // console.log("주소", addr);
-            const newData = {
+            const postData = {
                 userId: 105191400324450530000,
                 // userId: uid,
                 placeName: addr,
@@ -152,13 +152,20 @@ export default (props) => {
                 longitude: location.longitude,
                 distance: 0.0,
             };
-            console.log(newData);
+            const newData = {
+                time: moment(new Date()).format("kk:mm"),
+                title: " ",
+                description: addr,
+                latitude: Location.latitude,
+                longitude: Location.longitude,
+            };
             axios
-                .post("http://210.107.78.156:9009/api/timeline/", newData)
+                .post("http://210.107.78.156:9001/api/timeline/", postData)
+
+                .then(setData([...data, newData]))
                 .then(function (response) {
                     Alert.alert("현재위치가 등록되었습니다.");
-                })
-                .then(setData([...data, newData]));
+                });
         }
     };
 
@@ -182,9 +189,9 @@ export default (props) => {
             distance: 0.0,
         };
         axios
-            .put("http://210.107.78.156:9009/api/timeline/", modifyData)
+            .put("http://210.107.78.156:9001/api/timeline/", modifyData)
             .then(function (response) {
-                console.log("성공");
+                // console.log("성공");
             });
 
         setSelected(null);
@@ -331,7 +338,7 @@ export default (props) => {
                     circleColor="gray"
                     lineColor="gray"
                     lineWidth={1}
-                    // separator={true}
+                    separator={true}
                     titleStyle={{ marginTop: -10 }}
                     timeContainerStyle={{ minWidth: 52, marginTop: -10 }}
                     timeStyle={{
