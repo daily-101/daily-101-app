@@ -74,7 +74,7 @@ export default (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [place, setPlace] = useState("");
     const [price, setPrice] = useState("");
-    const [tab, setTab] = useState("식비");
+    const [tab, setTab] = useState("기타");
 
     const showCart = () => {
         setSelectedTab(false);
@@ -126,6 +126,7 @@ export default (props) => {
     const submitSpend = () => {
         const postData = {
             userId: 105191400324450530000,
+            // userId: 100970667093919960000,
             // userId: uid,
             category: tab,
             spendName: place,
@@ -472,7 +473,7 @@ export default (props) => {
                                         },
                                         { label: "기타", value: "기타" },
                                     ]}
-                                    defaultValue="식비"
+                                    defaultValue="기타"
                                     containerStyle={{ height: 50, width: 100 }}
                                     onChangeItem={(item) => setTab(item.value)}
                                 />

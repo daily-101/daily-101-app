@@ -9,7 +9,7 @@ export default () => {
     const [data, setData] = useState([]);
     const [date, setDate] = useState(new Date());
     const [loading, setLoading] = useState(false);
-
+    const [weather, setWeather] = useState({});
     const [cur, setCur] = useState({});
 
     const current = async () => {
@@ -39,17 +39,28 @@ export default () => {
                 const convertData = response.data?.map((s) => ({
                     id: s.id,
                     time: moment(s.date).format("kk:mm"),
-                    title: s.address,
-                    description: s.placeName,
+                    title: s.placeName,
+                    description: s.address,
                     latitude: s.latitude,
                     longitude: s.longitude,
                 }));
+
                 setData(convertData);
-                // console.log(response.data);
+                setWeather({
+                    condition:
+                        response.data[response.data.length - 1].cur_weather,
+                    temper: (
+                        response.data[response.data.length - 1].cur_temper - 273
+                    ).toFixed(1),
+                });
+
+                // console.log(response.data[response.data.length - 1]);
             });
     };
+    // console.log(weather);
     return (
         <TimelilnePresenter
+            weather={weather}
             data={data}
             date={date}
             setDate={setDate}

@@ -19,7 +19,7 @@ const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 const { height: HEIGHT } = Dimensions.get("window");
 
 export default (props) => {
-    const { date, setDate, data, setData, uid } = props;
+    const { date, setDate, data, setData, uid, weather } = props;
     const [addr, setAddr] = useState("");
 
     // const [cur, setCur] = useState({});
@@ -147,7 +147,7 @@ export default (props) => {
             const postData = {
                 userId: 105191400324450530000,
                 // userId: uid,
-                placeName: addr,
+                address: addr,
                 latitude: location.latitude,
                 longitude: location.longitude,
                 distance: 0.0,
@@ -161,7 +161,6 @@ export default (props) => {
             };
             axios
                 .post("http://210.107.78.156:9001/api/timeline/", postData)
-
                 .then(setData([...data, newData]))
                 .then(function (response) {
                     Alert.alert("현재위치가 등록되었습니다.");
@@ -182,8 +181,8 @@ export default (props) => {
         const modifyData = {
             id: selected.id,
             userId: 105191400324450530000,
-            address: place,
-            placeName: selected.description,
+            address: selected.description,
+            placeName: place,
             latitude: selected.latitude,
             longitude: selected.longitude,
             distance: 0.0,
@@ -191,7 +190,7 @@ export default (props) => {
         axios
             .put("http://210.107.78.156:9001/api/timeline/", modifyData)
             .then(function (response) {
-                // console.log("성공");
+                console.log("put 성공");
             });
 
         setSelected(null);
@@ -279,12 +278,15 @@ export default (props) => {
                 </TouchableOpacity>
                 {isLoading ? null : (
                     <View style={styles.weather}>
-                        <Weather
-                            temp={Math.round(temp)}
-                            // condition={condition}
-                        />
+                        <Weather temp={Math.round(temp)} condition="Clear" />
                     </View>
                 )}
+                {/* <View style={styles.weather}>
+                    <Weather
+                        temp={weather.temper}
+                        condition={weather.condition}
+                    />
+                </View> */}
             </View>
             <View style={styles.cardContainer}>
                 <View style={styles.card}>

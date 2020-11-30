@@ -35,7 +35,16 @@ export default function App() {
             require("./img/timeline_tap/spend.png"),
             require("./img/timeline_tap/walk.png"),
             require("./img/logo.png"),
-            require("./img/weather/sun.png"),
+            require("./img/weather/Sun.png"),
+            require("./img/weather/Clear.png"),
+            require("./img/weather/Clouds.png"),
+            require("./img/weather/Dust.png"),
+            require("./img/weather/Fog.png"),
+            require("./img/weather/Mist.png"),
+            require("./img/weather/Rain.png"),
+            require("./img/weather/Smoke.png"),
+            require("./img/weather/Snow.png"),
+            require("./img/weather/Thunderstorm.png"),
         ]);
     };
 
