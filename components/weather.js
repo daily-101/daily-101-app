@@ -42,11 +42,11 @@ export default function Weather({ temp, condition }) {
                 size={30}
             /> */}
             <Image
-                style={{ width: 30, height: 30 }}
+                style={{ width: 20, height: 20 }}
                 source={images[condition]?.uri}
                 // source={require("../img/weather/Clear.png")}
             />
-            <Text style={{ lineHeight: 23, marginLeft: 3, fontSize: 17 }}>
+            <Text style={{ lineHeight: 23, marginLeft: 5, fontSize: 17, color: "gray" }}>
                 {temp}°C
             </Text>
         </View>
@@ -55,6 +55,9 @@ export default function Weather({ temp, condition }) {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: "row",
+        flexDirection: "row", 
+        justifyContent:'center',  
+        alignItems: 'center',
+        left:10
     },
 });

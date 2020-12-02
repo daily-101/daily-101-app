@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { Asset } from "expo-asset";
+import { AppLoading } from "expo";
 import * as Font from "expo-font";
 import React, { useState } from "react";
 import { Image, StatusBar } from "react-native";
@@ -20,8 +21,14 @@ const cacheFonts = (fonts) => fonts.map((font) => Font.loadAsync(font));
 
 export default function App() {
     const [isReady, setIsReady] = useState(false);
-    const loadAssets = () => {
-        const images = cacheImages([
+    const loadAssets = async () => {
+        const fonts = await cacheFonts([
+            { NanumSquare_acL: require("./assets/fonts/NanumSquare_acL.ttf") },
+            { NanumSquare_acR: require("./assets/fonts/NanumSquare_acR.ttf") },
+            { NanumSquare_acEB: require("./assets/fonts/NanumSquare_acEB.ttf") },
+            { NanumSquare_acB: require("./assets/fonts/NanumSquare_acB.ttf") },
+        ]);
+        const images = await cacheImages([
             require("./assets/splash.png"),
             require("./assets/adaptive-icon.png"),
             require("./assets/icon.png"),
@@ -46,9 +53,12 @@ export default function App() {
             require("./img/weather/Snow.png"),
             require("./img/weather/Thunderstorm.png"),
         ]);
+        return Promise.all([...images, ...fonts]);
     };
 
-    return (
+    const onFinish = () => setIsReady(true);
+
+    return isReady ? (
         <>
             <NavigationContainer>
                 <Provider UserStore={UserStore}>
@@ -57,5 +67,11 @@ export default function App() {
             </NavigationContainer>
             <StatusBar barStyle="ligth-content" />
         </>
+    ) : (
+        <AppLoading
+            startAsync={loadAssets}
+            onFinish={onFinish}
+            onError={(e) => console.error(e)}
+        />
     );
 }

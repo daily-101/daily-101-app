@@ -83,41 +83,49 @@ export default () => {
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
             />
-            <View style={styles.topContainer}>
+            {/**main header section start */}
+            <View style={styles.mainLogo}>
+                {/**header logo */}
                 <Image
                     style={styles.logo}
                     source={require("../../img/logo.png")}
-                />
-                <Image
-                    style={styles.userIcon}
-                    source={{
-                        uri:
-                            "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
-                    }}
-                />
-                <TouchableOpacity
-                    style={styles.dateContainer}
-                    onPress={showDatePicker}
-                >
-                    <Text style={styles.date}>
-                        {moment(date).format("MMMM D, YYYY")}
-                    </Text>
-                    <AntDesign
-                        style={styles.underArrow}
-                        name="down"
-                        size={20}
-                        color="black"
-                    />
-                </TouchableOpacity>
-                {isLoading ? null : (
+                /> 
+                 {/**header weather */}
+                 {isLoading ? null : (
                     <View style={styles.weather}>
-                        <Weather
-                            temp={Math.round(temp)}
-                            // condition={condition}
-                        />
+                        <Weather temp={Math.round(temp)} condition="Clear" />
                     </View>
-                )}
+                )}    
+                 {/**header userIcon */}
+                 <Image
+                style={styles.userIcon}
+                source={{
+                    uri:
+                        "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
+                }}
+                />
             </View>
+                   
+            <View style={styles.topContainer}>
+                 {/**DatePicker */}
+                <Text style={styles.dateText}>
+                            {moment(date).format("MMMM D, YYYY")}
+                        </Text>            
+                    {/**datePicker underArrow */}
+                    <TouchableOpacity
+                        onPress={showDatePicker}
+                    >
+                        <AntDesign
+                            style={styles.underArrow}
+                            name="down"
+                            size={20}
+                            color="black"
+                        />
+                    </TouchableOpacity>                                 
+            </View>
+            {/**main header section end */}
+
+
             <View style={styles.activityContainer}>
                 <View style={styles.totalContainer}>
                     <View style={styles.totalItem}>
@@ -133,10 +141,15 @@ export default () => {
                         <Text style={styles.totalDataTitle}>Km</Text>
                     </View>
                 </View>
+                
                 <View style={styles.barGraph}>
                     <BarChart
                         style={{
-                            paddingVertical: 10,
+                            // paddingVertical: 12,
+                            right:7,
+                            // left:10,
+                            justifyContent:'center',
+                            top:15,
                         }}
                         data={data}
                         width={Dimensions.get("window").width}
@@ -145,10 +158,13 @@ export default () => {
                             backgroundColor: "white",
                             backgroundGradientFrom: "white",
                             backgroundGradientTo: "white",
-                            color: () => "grey",
-                            labelColor: () => "black",
-                            barPercentage: 1,
+                            // backgroundGradientFrom: "rgb(193, 226, 231)",
+                            // backgroundGradientTo: "rgb(245,245,245)",
+                            color: () => "gray",
+                            labelColor: () => "#bababa",
+                            barPercentage: 0.5,
                             decimalPlaces: 0,
+                            
                         }}
                         withInnerLines={false}
                         fromZero={true}
@@ -209,93 +225,144 @@ export default () => {
 };
 
 const styles = StyleSheet.create({
+        //main Header Style start
+    //Header1
+    mainLogo:{
+        height:50,
+        width:"100%",
+        flexDirection:"row",
+        justifyContent:'space-between',
+        alignItems: 'center',
+        // left:20,
+        backgroundColor:'#f5f5f5',
+        // top:10,
+    },
+    //Logo
+    logo: {
+        width: 60,
+        height: 18,
+        left: 20,
+        // top:10,
+        // borderWidth:1,
+        // borderColor:'blue'
+        // position: "absolute",
+        // top: 20,
+        // flex:1,
+        // justifyContent:'center',
+        // alignItems:'center',
+    },
+    //header1-weather
+    weather: {
+        // position: "absolute",
+        // backgroundColor:"gold",
+        // top: 11,
+        left:70,
+        // right:20,
+    },
+    //User Login Icon
+    userIcon: {
+        width: 25,
+        height: 25,
+        borderRadius: 15,
+        // position: "absolute",
+        right: 20,
+        // top: 10,
+    }, 
+    
+    //header2
+    topContainer: {
+        height:90,
+        // width: 230,
+        flexDirection:"row",
+        // justifyContent:'space-between',  
+        justifyContent:'center',  
+        alignItems: 'center',
+        backgroundColor:'white',
+        textAlign:'center',
+    },
+
+    //header2-datePicker
+    //dateAllConcept
+    dateStyle: {
+        backgroundColor:"blue",
+        // width:200,
+        // width: "100%",
+        // justifyContent:'space-around',
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        // top: 12,
+    },
+    //date Text
+    dateText:{        
+        fontSize: 20,
+        // fontWeight: "bold",
+        color:"black",
+        fontFamily: "NanumSquare_acEB",
+        // left:20,
+        // right:5,
+    },
+    //date Arrow
+    underArrow: {
+        // top: 0,
+        left: 2,
+        color:'black',
+    },
+    //main Header Style end
+
+
     historyText: {
         color: "grey",
     },
     amItem: {
         flexDirection: "row",
         justifyContent: "space-between",
-        marginHorizontal: 40,
+        marginHorizontal: 15,
         paddingVertical: 10,
         borderColor: "grey",
         borderBottomWidth: 0.5,
     },
     amContainer: {
-        marginLeft: 10,
+        // marginLeft: 10,
     },
     historyContainer: {
         // paddingVertical: 30,
-        marginLeft: 70,
-        marginVertical: 20,
+        margin: 30,
+        marginVertical: 30,
     },
     barGraph: {
+        flexDirection:"row",
         backgroundColor: "white",
+        alignItems: 'center',  
+        justifyContent:'center',
     },
+    //총 활동량 수치-항목text
     totalDataTitle: {
         color: "grey",
         fontSize: 13,
     },
     totalData: {
-        fontWeight: "bold",
+        // fontWeight: "bold",
         fontSize: 17,
     },
     totalItem: {
         textAlign: "center",
         justifyContent: "center",
         alignItems: "center",
+        // backgroundColor:"blue",
     },
+    //총 활동량 수치 section
     totalContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingVertical: 25,
+        // paddingVertical: 10,
         marginHorizontal: 40,
     },
+    //활동량 contents
     activityContainer: {
         height: "100%",
         backgroundColor: "white",
         flex: 1,
     },
-    logo: {
-        width: 90,
-        height: 25,
-        position: "absolute",
-        top: 20,
-        left: 160,
-    },
-    userIcon: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        position: "absolute",
-        right: 30,
-        top: 18,
-    },
-    dateContainer: {
-        width: "100%",
-        height: "100%",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        top: 30,
-    },
-    underArrow: {
-        top: 3,
-        left: 3,
-    },
-    weather: {
-        position: "absolute",
-        top: 20,
-        left: 20,
-    },
-    date: {
-        // position: "absolute",
-        // top: 80,
-        // left: 25,
-        fontSize: 18,
-        fontWeight: "bold",
-    },
-    topContainer: {
-        height: HEIGHT / 4,
-        width: "100%",
-    },
+   
 });
