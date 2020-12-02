@@ -13,6 +13,7 @@ import { Alert } from "react-native";
 import Weather from "../../components/weather";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
+import { GoogleAuthData } from "expo-google-sign-in";
 
 const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 
@@ -145,7 +146,7 @@ export default (props) => {
             // console.log("위치", location);
             // console.log("주소", addr);
             const postData = {
-                userId: 105191400324450530000,
+                userId: 100970667093919960712,
                 // userId: uid,
                 address: addr,
                 latitude: location.latitude,
@@ -180,7 +181,7 @@ export default (props) => {
 
         const modifyData = {
             id: selected.id,
-            userId: 105191400324450530000,
+            userId: 100970667093919960712,
             address: selected.description,
             placeName: place,
             latitude: selected.latitude,
@@ -221,13 +222,14 @@ export default (props) => {
         }
     };
 
+    {/**timeline text contents */}
     const renderDetail = (rowData, sectionID, rowID) => {
-        let title = <Text style={[styles.title]}>{rowData.title}</Text>;
+        let title = <Text style={styles.title}>{rowData.title}</Text>;
         var desc = null;
         if (rowData.description) {
             desc = (
                 <View style={styles.descriptionContainer}>
-                    <Text style={[styles.textDescription]}>
+                    <Text style={styles.textDescription}>
                         {rowData.description}
                     </Text>
                 </View>
@@ -249,46 +251,50 @@ export default (props) => {
                 onConfirm={handleConfirm}
                 date={date}
                 onCancel={hideDatePicker}
-            />
-            <Image
+            />   
+            {/**main header section start */}
+            <View style={styles.mainLogo}>
+                {/**header logo */}
+                <Image
+                    style={styles.logo}
+                    source={require("../../img/logo.png")}
+                /> 
+                 {/**header weather */}
+                 {isLoading ? null : (
+                    <View style={styles.weather}>
+                        <Weather temp={Math.round(temp)} condition="Clear" />
+                    </View>
+                )}    
+                 {/**header userIcon */}
+                 <Image
                 style={styles.userIcon}
                 source={{
                     uri:
                         "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
                 }}
-            />
-            <View style={styles.topContainer}>
-                <Image
-                    style={styles.logo}
-                    source={require("../../img/logo.png")}
                 />
-                <TouchableOpacity
-                    style={styles.dateContainer}
-                    onPress={showDatePicker}
-                >
-                    <Text style={styles.date}>
-                        {moment(date).format("MMMM D, YYYY")}
-                    </Text>
-                    <AntDesign
-                        style={styles.underArrow}
-                        name="down"
-                        size={20}
-                        color="black"
-                    />
-                </TouchableOpacity>
-                {isLoading ? null : (
-                    <View style={styles.weather}>
-                        <Weather temp={Math.round(temp)} condition="Clear" />
-                    </View>
-                )}
-                {/* <View style={styles.weather}>
-                    <Weather
-                        temp={weather.temper}
-                        condition={weather.condition}
-                    />
-                </View> */}
             </View>
-            <View style={styles.cardContainer}>
+                   
+            <View style={styles.topContainer}>
+                 {/**DatePicker */}
+                <Text style={styles.dateText}>
+                            {moment(date).format("MMMM D, YYYY")}
+                        </Text>            
+                    {/**datePicker underArrow */}
+                    <TouchableOpacity
+                        onPress={showDatePicker}
+                    >
+                        <AntDesign
+                            style={styles.underArrow}
+                            name="down"
+                            size={20}
+                            color="black"
+                        />
+                    </TouchableOpacity>                                 
+            </View>
+            {/**main header section end */}
+
+            {/* <View style={styles.cardContainer}>
                 <View style={styles.card}>
                     <Image
                         style={{ width: 35, height: 35 }}
@@ -317,7 +323,7 @@ export default (props) => {
                     />
                     <Text>72,700원</Text>
                 </View>
-            </View>
+            </View> */}
             {/* <View style={styles.container}>
                 <Text>{data[2].placeName}</Text>
                 <ScrollView>
@@ -332,170 +338,247 @@ export default (props) => {
                     })}
                 </ScrollView>
             </View> */}
-            <View style={styles.container}>
-                {renderSelected()}
-                <Timeline
-                    style={styles.list}
-                    circleSize={12}
-                    circleColor="gray"
-                    lineColor="gray"
-                    lineWidth={1}
-                    separator={true}
-                    titleStyle={{ marginTop: -10 }}
-                    timeContainerStyle={{ minWidth: 52, marginTop: -10 }}
-                    timeStyle={{
-                        textAlign: "center",
-                        // backgroundColor: "#ff9797",
-                        color: "gray",
-                        padding: 5,
-                        borderRadius: 13,
-                    }}
-                    // showTime={false}
-                    descriptionStyle={{ color: "gray" }}
-                    options={{
-                        style: { paddingTop: 5 },
-                    }}
-                    // innerCircle={"dot"}
-                    data={data}
-                    renderEvent={renderDetail}
-                    onEventPress={onEventPress}
-                />
+            <View style={styles.mainContents}>
+                <View style={styles.container}>
+                    {renderSelected()}
+                    <Timeline
+                        style={styles.list}
+                        circleSize={10}
+                        circleColor="#c1e2f1"
+                        lineColor="rgb(201,201,201)"
+                        lineWidth={1}
+                        separator={true}
+                        titleStyle={{ marginTop: -14 }}
+                        timeContainerStyle={{ minWidth: 50, marginTop: -10, }}
+                        timeStyle={{
+                            textAlign: "center",
+                            color: "gray",
+                            padding: 5,
+                            borderRadius: 13,
+                        }}
+                        // showTime={false}
+                        descriptionStyle={{ color: "gray" }}
+                        options={{
+                            style: { paddingTop: 5 },
+                        }}
+                        // innerCircle={"dot"}
+                        data={data}
+                        renderEvent={renderDetail}
+                        onEventPress={onEventPress}
+                    />                
+                </View>
+                <View style={styles.submitBtnSection}>
                 <TouchableOpacity
-                    style={styles.submitButton}
-                    onPress={submitLocation}
-                >
-                    <Text style={styles.submitText}>등록!</Text>
-                </TouchableOpacity>
+                        style={styles.submitButton}
+                        onPress={submitLocation}
+                    >
+                        <Text style={styles.submitText}>현재위치등록</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
-            {/* <View>
-                <Text>{uid}</Text>
-            </View> */}
         </>
     );
 };
 const styles = StyleSheet.create({
+    
+   //장소입력 버튼 text
     inputText: {
-        color: "white",
+        color: "black",
         textAlign: "center",
     },
+    //장소입력 버튼
     inputButton: {
-        elevation: 5,
-        paddingTop: 8,
-        height: 40,
-        backgroundColor: "rgb(202,216,228)",
         width: 80,
-        borderRadius: 16,
-        // marginLeft: 20,
-        // marginTop: 10,
+        height: 25,
+        right:20,        
+        lineHeight: 25,
+        borderRadius: 20,
+        backgroundColor: "rgb(245,245,245)",
+        justifyContent:'center',
     },
+    //장소입력 창
     inputPlace: {
-        borderRadius: 16,
-        borderWidth: 0.5,
-        height: 40,
-        paddingLeft: 15,
-        width: 280,
+        borderRadius: 3,
+        borderWidth: 0.1,
+        height: 30,  
+        width: 200,              
+        left: 20,
+        paddingLeft:20,  
     },
+    //장소입력 section
     inputContainer: {
-        flexDirection: "row",
+        // backgroundColor:"red",
+        flexDirection:"row",
+        justifyContent:'space-between',
+        alignItems: 'center',  
+        height:60,     
     },
+    
+    //현재위치등록버튼section
+    submitBtnSection:{
+        backgroundColor:'white',
+        flexDirection:"row",
+        justifyContent:'center',
+        alignItems: 'center',
+        // top:9,
+        height:57,
+        // bottom:5,
+
+    },
+    //현재위치등록등록 버튼 text
     submitText: {
-        color: "white",
+        color: "black",
         textAlign: "center",
     },
+    //현재위치등록 버튼
     submitButton: {
-        marginLeft: 280,
         width: 100,
         height: 25,
         lineHeight: 25,
         borderRadius: 20,
-        backgroundColor: "rgb(202,216,228)",
+        backgroundColor: "rgb(245,245,245)",
+        justifyContent:'center',
     },
+       
+    //main Header Style start
+    //Header1
+    mainLogo:{
+        height:50,
+        width:"100%",
+        flexDirection:"row",
+        justifyContent:'space-between',
+        alignItems: 'center',
+        // left:20,
+        backgroundColor:'#f5f5f5',
+        // top:10,
+    },
+    //Logo
     logo: {
-        width: 90,
-        height: 25,
-        position: "absolute",
-        top: 20,
-        left: 160,
-    },
-    userIcon: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        position: "absolute",
-        right: 30,
-        top: 18,
-    },
-    dateContainer: {
-        width: "100%",
-        height: "100%",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        top: 12,
-    },
-    underArrow: {
-        top: 3,
-        left: 3,
-    },
-    weather: {
-        position: "absolute",
-        top: 20,
+        width: 60,
+        height: 18,
         left: 20,
     },
-    date: {
-        // position: "absolute",
-        // top: 80,
-        // left: 25,
-        fontSize: 18,
-        fontWeight: "bold",
+    //header1-weather
+    weather: {
+        left:70,
     },
+    //User Login Icon
+    userIcon: {
+        width: 25,
+        height: 25,
+        borderRadius: 15,
+        right: 20,
+    }, 
+    
+    //header2
     topContainer: {
-        height: HEIGHT / 4,
-        width: "100%",
+        height:90,
+        // width: 230,
+        flexDirection:"row",
+        // justifyContent:'space-between',  
+        justifyContent:'center',  
+        alignItems: 'center',
+        backgroundColor:'white',
+        textAlign:'center',
     },
-    card: {
-        marginLeft: 23,
-        backgroundColor: "white",
-        width: 75,
-        height: 75,
+
+    //header2-datePicker
+    //dateAllConcept
+    dateStyle: {
+        backgroundColor:"blue",
+        flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "black",
+        // top: 12,
     },
-    cardContainer: {
-        flexDirection: "row",
-        position: "absolute",
-        elevation: 3,
-        top: 160,
-        // left: 30,
+    //date Text
+    dateText:{        
+        fontSize: 20,
+        color:"black",
+        fontFamily: "NanumSquare_acEB",
+        // left:20,
+        // right:5,
     },
+    //date Arrow
+    underArrow: {
+        // top: 0,
+        left: 2,
+        color:'black',
+    },
+    //main Header Style end
+
+
+    //mainContents Section
+    mainContents:{
+        // flexDirection:"row",
+        // justifyContent:'center',
+        // alignContent: 'space-between',
+        // backgroundColor:'red',
+    },    
+    //timeline Section
     container: {
-        flex: 1,
-        padding: 20,
-        paddingTop: 65,
+        fontFamily:"NanumSquare_acL",
+        // flex: 1,
+        height:370,
         backgroundColor: "white",
+        width:"100%",
+        // flexDirection: "row",
+        // justifyContent: "center",
+        // alignItems: "center",
     },
+    //timeline scroll
     list: {
-        flex: 1,
-        marginTop: 20,
+        // flex: 1,
+        height: 400,
+        marginLeft:20,
+        marginRight:20,
+        // marginTop: 5,
+        backgroundColor:"white",
+        // left:20,
+        // right:20,
+        // width:"100%",
     },
+    //timeline spot
     title: {
         fontSize: 16,
         fontWeight: "bold",
+        fontFamily:"NanumSquare_acL",
+        color:"red",
     },
+    //
     descriptionContainer: {
         flexDirection: "row",
-        paddingRight: 50,
+        // paddingRight: 50,
+        color:"gold",
     },
     image: {
         width: 50,
         height: 50,
         borderRadius: 25,
     },
+    //timeline text address
     textDescription: {
-        marginLeft: 10,
-        color: "gray",
+        marginLeft: 10,        
     },
+        //main icon box
+        card: {
+            marginLeft: 23,
+            backgroundColor: "white",
+            width: 75,
+            height: 75,
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: "black",
+        },
+        //main icon Group
+        cardContainer: {
+            flexDirection: "row",//row로 정렬
+            // position: "absolute",
+            elevation: 3,
+            // top: 160,
+            backgroundColor:"gray"
+            // left: 30,
+        },
 });

@@ -125,7 +125,7 @@ export default (props) => {
 
     const submitSpend = () => {
         const postData = {
-            userId: 105191400324450530000,
+            userId: 100970667093919960712,
             // userId: 100970667093919960000,
             // userId: uid,
             category: tab,
@@ -156,41 +156,47 @@ export default (props) => {
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
             />
-            <View style={styles.topContainer}>
+             {/**main header section start */}
+             <View style={styles.mainLogo}>
+                {/**header logo */}
                 <Image
                     style={styles.logo}
                     source={require("../../img/logo.png")}
-                />
-                <Image
-                    style={styles.userIcon}
-                    source={{
-                        uri:
-                            "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
-                    }}
-                />
-                <TouchableOpacity
-                    style={styles.dateContainer}
-                    onPress={showDatePicker}
-                >
-                    <Text style={styles.date}>
-                        {moment(date).format("MMMM D, YYYY")}
-                    </Text>
-                    <AntDesign
-                        style={styles.underArrow}
-                        name="down"
-                        size={20}
-                        color="black"
-                    />
-                </TouchableOpacity>
-                {isLoading ? null : (
+                /> 
+                 {/**header weather */}
+                 {isLoading ? null : (
                     <View style={styles.weather}>
-                        <Weather
-                            temp={Math.round(temp)}
-                            // condition={condition}
-                        />
+                        <Weather temp={Math.round(temp)} condition="Clear" />
                     </View>
-                )}
+                )}    
+                 {/**header userIcon */}
+                 <Image
+                style={styles.userIcon}
+                source={{
+                    uri:
+                        "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
+                }}
+                />
             </View>
+                   
+            <View style={styles.topContainer}>
+                 {/**DatePicker */}
+                <Text style={styles.dateText}>
+                            {moment(date).format("MMMM D, YYYY")}
+                        </Text>            
+                    {/**datePicker underArrow */}
+                    <TouchableOpacity
+                        onPress={showDatePicker}
+                    >
+                        <AntDesign
+                            style={styles.underArrow}
+                            name="down"
+                            size={20}
+                            color="black"
+                        />
+                    </TouchableOpacity>                                 
+            </View>
+            {/**main header section end */}
             {selectedTab ? (
                 <View style={styles.spendContainer}>
                     <View style={styles.totalContainer}>
@@ -474,7 +480,7 @@ export default (props) => {
                                         { label: "기타", value: "기타" },
                                     ]}
                                     defaultValue="기타"
-                                    containerStyle={{ height: 50, width: 100 }}
+                                    containerStyle={{ height: 30, width: 100 }}
                                     onChangeItem={(item) => setTab(item.value)}
                                 />
                                 <TextInput
@@ -491,13 +497,12 @@ export default (props) => {
                                 />
                             </View>
                             <TouchableOpacity
-                                style={{
-                                    ...styles.openButton,
-                                    backgroundColor: "#2196F3",
-                                }}
+                                style={
+                                    styles.submitButton
+                                }
                                 onPress={submitSpend}
                             >
-                                <Text style={styles.textStyle}>등록하기!</Text>
+                                <Text style={styles.submitText}>등록하기!</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -579,13 +584,15 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     submitContainer: {
-        paddingBottom: 20,
-        backgroundColor: "white",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor:'white',
+        flexDirection:"row",
+        justifyContent:'center',
+        alignItems: 'center',
+        // top:9,
+        height:57,
     },
     submitText: {
-        color: "white",
+        color: "black",
         textAlign: "center",
     },
     submitButton: {
@@ -593,7 +600,8 @@ const styles = StyleSheet.create({
         height: 25,
         lineHeight: 25,
         borderRadius: 20,
-        backgroundColor: "rgb(202,216,228)",
+        backgroundColor: "rgb(245,245,245)",
+        justifyContent:'center',
     },
     allText: {
         fontSize: 12,
@@ -671,47 +679,88 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         flex: 1,
     },
+ //main Header Style start
+    //Header1
+    mainLogo:{
+        height:50,
+        width:"100%",
+        flexDirection:"row",
+        justifyContent:'space-between',
+        alignItems: 'center',
+        // left:20,
+        backgroundColor:'#f5f5f5',
+        // top:10,
+    },
+    //Logo
     logo: {
-        width: 90,
-        height: 25,
-        position: "absolute",
-        top: 20,
-        left: 160,
+        width: 60,
+        height: 18,
+        left: 20,
+        // top:10,
+        // borderWidth:1,
+        // borderColor:'blue'
+        // position: "absolute",
+        // top: 20,
+        // flex:1,
+        // justifyContent:'center',
+        // alignItems:'center',
     },
+    //header1-weather
+    weather: {
+        // position: "absolute",
+        // backgroundColor:"gold",
+        // top: 11,
+        left:70,
+        // right:20,
+    },
+    //User Login Icon
     userIcon: {
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
         borderRadius: 15,
-        position: "absolute",
-        right: 30,
-        top: 18,
+        // position: "absolute",
+        right: 20,
+        // top: 10,
+    }, 
+    
+    //header2
+    topContainer: {
+        height:90,
+        // width: 230,
+        flexDirection:"row",
+        // justifyContent:'space-between',  
+        justifyContent:'center',  
+        alignItems: 'center',
+        backgroundColor:'white',
+        textAlign:'center',
     },
-    dateContainer: {
-        width: "100%",
-        height: "100%",
+
+    //header2-datePicker
+    //dateAllConcept
+    dateStyle: {
+        backgroundColor:"blue",
+        // width:200,
+        // width: "100%",
+        // justifyContent:'space-around',
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        top: 30,
+        // top: 12,
     },
+    //date Text
+    dateText:{        
+        fontSize: 20,
+        // fontWeight: "bold",
+        color:"black",
+        fontFamily: "NanumSquare_acEB",
+        // left:20,
+        // right:5,
+    },
+    //date Arrow
     underArrow: {
-        top: 3,
-        left: 3,
+        // top: 0,
+        left: 2,
+        color:'black',
     },
-    weather: {
-        position: "absolute",
-        top: 20,
-        left: 20,
-    },
-    date: {
-        // position: "absolute",
-        // top: 80,
-        // left: 25,
-        fontSize: 18,
-        fontWeight: "bold",
-    },
-    topContainer: {
-        height: HEIGHT / 4,
-        width: "100%",
-    },
+    //main Header Style end
 });

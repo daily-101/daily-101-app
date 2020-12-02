@@ -40,7 +40,7 @@ export default (props) => {
 
     const submitDiet = () => {
         const postData = {
-            userId: 105191400324450530000,
+            userId: 100970667093919960712,
             filename: filename + ".jpg",
             calories: calories,
             foodName: foodName,
@@ -131,38 +131,47 @@ export default (props) => {
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
             />
-            <View style={styles.topContainer}>
+            {/**main header section start */}
+            <View style={styles.mainLogo}>
+                {/**header logo */}
                 <Image
                     style={styles.logo}
                     source={require("../../img/logo.png")}
-                />
-                <Image
-                    style={styles.userIcon}
-                    source={{
-                        uri:
-                            "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
-                    }}
-                />
-                <TouchableOpacity
-                    style={styles.dateContainer}
-                    onPress={showDatePicker}
-                >
-                    <Text style={styles.date}>
-                        {moment(date).format("MMMM D, YYYY")}
-                    </Text>
-                    <AntDesign
-                        style={styles.underArrow}
-                        name="down"
-                        size={20}
-                        color="black"
-                    />
-                </TouchableOpacity>
-                {isLoading ? null : (
+                /> 
+                 {/**header weather */}
+                 {isLoading ? null : (
                     <View style={styles.weather}>
                         <Weather temp={Math.round(temp)} condition="Clear" />
                     </View>
-                )}
+                )}    
+                 {/**header userIcon */}
+                 <Image
+                style={styles.userIcon}
+                source={{
+                    uri:
+                        "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
+                }}
+                />
             </View>
+                   
+            <View style={styles.topContainer}>
+                 {/**DatePicker */}
+                <Text style={styles.dateText}>
+                            {moment(date).format("MMMM D, YYYY")}
+                        </Text>            
+                    {/**datePicker underArrow */}
+                    <TouchableOpacity
+                        onPress={showDatePicker}
+                    >
+                        <AntDesign
+                            style={styles.underArrow}
+                            name="down"
+                            size={20}
+                            color="black"
+                        />
+                    </TouchableOpacity>                                 
+            </View>
+            {/**main header section end */}
             <View style={styles.dietContainer}>
                 <View style={styles.totalContainer}>
                     <Text style={styles.totalCaloriesData}>
@@ -195,7 +204,7 @@ export default (props) => {
                           ))
                         : null}
                 </ScrollView>
-                <View style={styles.submitContainer}>
+                <View style={styles.submitBtnSection}>
                     <TouchableOpacity
                         onPress={() => setModalVisible(true)}
                         style={styles.submitButton}
@@ -238,30 +247,26 @@ export default (props) => {
                                         value={calories}
                                     />
                                 </View>
-                                <View style={styles.buttonContainer}>
+                                <View style={styles.submitBtnSection}>
+                                    <View style={styles.submitButton}>
+                                        <TouchableOpacity                                        
+                                            onPress={onChooseImage}
+                                        >
+                                            <Text style={styles.submitText}>
+                                                사진선택
+                                            </Text>
+                                        </TouchableOpacity>
+                                    </View>
+
+                                    
                                     <TouchableOpacity
-                                        style={{
-                                            ...styles.openButton,
-                                            backgroundColor: "#2196F3",
-                                        }}
-                                        onPress={onChooseImage}
-                                    >
-                                        <Text style={styles.textStyle}>
-                                            사진선택!
-                                        </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={{
-                                            ...styles.openButton,
-                                            backgroundColor: "#2196F3",
-                                        }}
-                                        onPress={submitDiet}
-                                    >
-                                        <Text style={styles.textStyle}>
-                                            등록하기!
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
+                                        style={styles.submitButton}
+                                        onPress={submitDiet}                                    >
+                                            <Text style={styles.submitText}>
+                                                등록하기
+                                            </Text>
+                                        </TouchableOpacity>                                    
+                                    </View>
                             </View>
                         </View>
                     </Modal>
@@ -272,6 +277,33 @@ export default (props) => {
 };
 
 const styles = StyleSheet.create({
+
+    //식단등록버튼section
+    submitBtnSection:{
+        backgroundColor:'white',
+        flexDirection:"row",
+        justifyContent:'center',
+        alignItems: 'center',
+        // top:9,
+        height:57,
+        // bottom:5,
+
+    },
+    //식단등록 버튼 text
+    submitText: {
+        color: "black",
+        textAlign: "center",
+    },
+    //식단 버튼
+    submitButton: {
+        width: 100,
+        height: 25,
+        lineHeight: 25,
+        borderRadius: 20,
+        backgroundColor: "rgb(245,245,245)",
+        justifyContent:'center',
+    },
+
     buttonContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -289,6 +321,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
     },
+
+
     inputPrice: {
         width: 100,
         paddingLeft: 10,
@@ -328,24 +362,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-    },
-    submitContainer: {
-        paddingBottom: 10,
-        paddingTop: 10,
-        backgroundColor: "white",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    submitText: {
-        color: "white",
-        textAlign: "center",
-    },
-    submitButton: {
-        width: 100,
-        height: 25,
-        lineHeight: 25,
-        borderRadius: 20,
-        backgroundColor: "rgb(202,216,228)",
     },
     dietCalories: {
         width: 100,
@@ -395,47 +411,88 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         flex: 1,
     },
+    //main Header Style start
+    //Header1
+    mainLogo:{
+        height:50,
+        width:"100%",
+        flexDirection:"row",
+        justifyContent:'space-between',
+        alignItems: 'center',
+        // left:20,
+        backgroundColor:'#f5f5f5',
+        // top:10,
+    },
+    //Logo
     logo: {
-        width: 90,
-        height: 25,
-        position: "absolute",
-        top: 20,
-        left: 160,
+        width: 60,
+        height: 18,
+        left: 20,
+        // top:10,
+        // borderWidth:1,
+        // borderColor:'blue'
+        // position: "absolute",
+        // top: 20,
+        // flex:1,
+        // justifyContent:'center',
+        // alignItems:'center',
     },
+    //header1-weather
+    weather: {
+        // position: "absolute",
+        // backgroundColor:"gold",
+        // top: 11,
+        left:70,
+        // right:20,
+    },
+    //User Login Icon
     userIcon: {
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
         borderRadius: 15,
-        position: "absolute",
-        right: 30,
-        top: 18,
+        // position: "absolute",
+        right: 20,
+        // top: 10,
+    }, 
+    
+    //header2
+    topContainer: {
+        height:90,
+        // width: 230,
+        flexDirection:"row",
+        // justifyContent:'space-between',  
+        justifyContent:'center',  
+        alignItems: 'center',
+        backgroundColor:'white',
+        textAlign:'center',
     },
-    dateContainer: {
-        width: "100%",
-        height: "100%",
+
+    //header2-datePicker
+    //dateAllConcept
+    dateStyle: {
+        backgroundColor:"blue",
+        // width:200,
+        // width: "100%",
+        // justifyContent:'space-around',
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-        top: 30,
+        // top: 12,
     },
+    //date Text
+    dateText:{        
+        fontSize: 20,
+        // fontWeight: "bold",
+        color:"black",
+        fontFamily: "NanumSquare_acEB",
+        // left:20,
+        // right:5,
+    },
+    //date Arrow
     underArrow: {
-        top: 3,
-        left: 3,
+        // top: 0,
+        left: 2,
+        color:'black',
     },
-    weather: {
-        position: "absolute",
-        top: 20,
-        left: 20,
-    },
-    date: {
-        // position: "absolute",
-        // top: 80,
-        // left: 25,
-        fontSize: 18,
-        fontWeight: "bold",
-    },
-    topContainer: {
-        height: HEIGHT / 4,
-        width: "100%",
-    },
+    //main Header Style end
 });

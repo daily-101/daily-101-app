@@ -61,5 +61,10 @@
         "@babel/plugin-proposal-decorators": "7.12.1",
         "babel-preset-react-native-stage-0": "1.0.1"
     },
+    "rnpm": {
+        "assets": [
+            "./assets/fonts"
+        ]
+    },
     "private": true
 }

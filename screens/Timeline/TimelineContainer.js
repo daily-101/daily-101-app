@@ -32,7 +32,7 @@ export default () => {
     const getTimeline = async () => {
         const data = await axios
             .get(
-                `http://210.107.78.156:9001/api/timeline/${date}/105191400324450530000`
+                `http://210.107.78.156:9001/api/timeline/${date}/100970667093919960712`
             )
             // .get(`http://210.107.78.156:9009/api/timeline/${date}/${cur.uid}`)
             .then(function (response) {

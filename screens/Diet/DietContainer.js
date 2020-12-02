@@ -34,7 +34,7 @@ export default () => {
     const getDiet = async () => {
         await axios
             .get(
-                `http://210.107.78.156:9004/api/food/${date}/105191400324450530000`
+                `http://210.107.78.156:9004/api/food/${date}/100970667093919960712`
             )
             .then(function (response) {
                 setData(response.data);

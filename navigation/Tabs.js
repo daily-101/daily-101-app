@@ -6,7 +6,7 @@ import Diet from "../screens/Diet";
 import Spend from "../screens/Spend";
 import Timeline from "../screens/Timeline";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import { Alert, Image } from "react-native";
+import { View, Text, Alert, Image } from "react-native";
 
 const Tabs = createBottomTabNavigator();
 
@@ -19,24 +19,36 @@ export default ({ navigation, route }) => {
     }, [route]);
 
     return (
-        <Tabs.Navigator
+        <Tabs.Navigator 
+            style={{position:'absolute', hight:100}}
             screenOptions={({ route }) => {
                 return {
-                    tabBarIcon: () => {
+                    tabBarIcon : ({focused}) => {
                         let imgPath;
-                        if (route.name === "타임라인")
-                            imgPath = require("../img/bottom_tap/timeline.png");
-                        else if (route.name === "활동량")
-                            imgPath = require("../img/bottom_tap/activity.png");
-                        else if (route.name === "소비")
-                            imgPath = require("../img/bottom_tap/spend.png");
-                        else if (route.name === "식단")
-                            imgPath = require("../img/bottom_tap/diet.png");
+                        let focusImagePath;
+                        if (route.name === "타임라인"){
+                            imgPath = require("../img/bottom_tap/timeline_icon_gray.png");
+                            focusImagePath = require("../img/bottom_tap/timeline.png")
+                        }
+                        else if (route.name === "활동량"){
+                            imgPath = require("../img/bottom_tap/activity_icon_gray.png");
+                            focusImagePath = require("../img/bottom_tap/activity.png")
+                        }
+                        else if (route.name === "소비"){
+                            imgPath = require("../img/bottom_tap/spend_icon_gray.png");
+                            focusImagePath = require("../img/bottom_tap/spend.png")
+                        }
+                        else if (route.name === "식단"){
+                            imgPath = require("../img/bottom_tap/diet_icon_gray.png");
+                            focusImagePath = require("../img/bottom_tap/diet.png")
+                        }
                         return (
+                            
                             <Image
-                                style={{ width: 25, height: 25 }}
-                                source={imgPath}
+                                style={{ width: 25, height: 25, Bottom:20 }}
+                                source = {focused ? focusImagePath : imgPath}
                             />
+                           
                             // <MaterialIcons
                             //     name={iconName}
                             //     color={focused ? "blue" : "grey"}
