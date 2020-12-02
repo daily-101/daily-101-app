@@ -12,12 +12,10 @@ export default ({ navigation }) => {
     //     const user = await GoogleSignIn.getCurrentUser();
     //     setCur(user);
     // };
-
     const initAsync = async () => {
         await GoogleSignIn.initAsync({
             clientId:
-                "626752650215-l163crvh5vc15t6ptj71ts5k0md99php.apps.googleusercontent.com   ",
-            // "626752650215-9614q5uedogo96okooink83ibifa4i2k.apps.googleusercontent.com",
+                "626752650215-9614q5uedogo96okooink83ibifa4i2k.apps.googleusercontent.com",
         });
         _syncUserWithStateAsync();
     };
@@ -48,22 +46,22 @@ export default ({ navigation }) => {
     };
 
     const onPress = useCallback(() => {
-        navigation.navigate("Tabs");
+        // navigation.navigate("Tabs");
         // console.log("유저 데이터 ", userData);
-        // if (user) {
-        //     signOutAsync();
-        //     // current();
-        //     //     setLogin("로그아웃");
-        // } else {
-        //     signInAsync();
+        if (user) {
+            signOutAsync();
+            // current();
+            //     setLogin("로그아웃");
+        } else {
+            signInAsync();
 
-        //     // current();
-        //     //     setLogin("로그인");
-        // }
+            // current();
+            //     setLogin("로그인");
+        }
     });
 
     useEffect(() => {
-        // initAsync();
+        initAsync();
     }, []);
 
     return (
@@ -84,12 +82,6 @@ export default ({ navigation }) => {
                 />
                 <Text style={styles.buttonText}>google로 로그인하기</Text>
             </TouchableOpacity>
-
-            {/* <View>
-                <Text>
-                    {JSON.stringify(cur)}, {isLogin}
-                </Text>
-            </View> */}
         </View>
     );
 };

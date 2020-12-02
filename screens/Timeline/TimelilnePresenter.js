@@ -181,6 +181,7 @@ export default (props) => {
         const modifyData = {
             id: selected.id,
             userId: 105191400324450530000,
+            // userId: uid,
             address: selected.description,
             placeName: place,
             latitude: selected.latitude,
@@ -333,6 +334,7 @@ export default (props) => {
                 </ScrollView>
             </View> */}
             <View style={styles.container}>
+                {/* <Text>{uid}</Text> */}
                 {renderSelected()}
                 <Timeline
                     style={styles.list}

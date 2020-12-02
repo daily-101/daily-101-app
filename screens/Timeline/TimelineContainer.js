@@ -18,12 +18,12 @@ export default () => {
         setLoading(true);
     };
 
-    // useEffect(() => {
-    //     current();
-    //     if (loading) {
-    //         getTimeline();
-    //     }
-    // }, []);
+    useEffect(() => {
+        current();
+        if (loading) {
+            getTimeline();
+        }
+    }, []);
 
     useEffect(() => {
         getTimeline();
@@ -31,9 +31,7 @@ export default () => {
 
     const getTimeline = async () => {
         const data = await axios
-            .get(
-                `http://210.107.78.156:9001/api/timeline/${date}/105191400324450530000`
-            )
+            .get(`http://210.107.78.156:9001/api/timeline/${date}/${cur.uid}`)
             // .get(`http://210.107.78.156:9009/api/timeline/${date}/${cur.uid}`)
             .then(function (response) {
                 const convertData = response.data?.map((s) => ({
@@ -65,7 +63,7 @@ export default () => {
             date={date}
             setDate={setDate}
             setData={setData}
-            // uid={cur.uid ? cur.uid : ""}
+            uid={cur ? cur.uid : ""}
         />
     );
 };

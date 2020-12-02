@@ -40,7 +40,7 @@ export default () => {
                 setData(response.data);
             });
         getImages();
-
+        setIsData(true);
         // .then(
 
         // )
@@ -57,7 +57,6 @@ export default () => {
                 .then(function (url) {
                     setUri(url, idx);
                 })
-                .then(setIsData(true))
                 .catch(function (error) {
                     switch (error.code) {
                         case "storage/object-not-found":
@@ -79,9 +78,12 @@ export default () => {
     };
 
     useEffect(() => {
-        console.log(date);
+        setIsData(false);
         getDiet();
     }, [date]);
+    useEffect(() => {
+        getDiet();
+    }, []);
     return (
         <DietPresenter
             data={isData ? data : []}
