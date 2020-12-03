@@ -2,7 +2,8 @@
     "expo": {
         "name": "daily101-app",
         "slug": "daily101-app",
-        "version": "1.0.0",
+        "privacy": "public",
+        "version": "1.0.1",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "splash": {
@@ -23,7 +24,14 @@
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"
-            }
+            },
+            "permissions": [
+                "CAMERA",
+                "RECORD_AUDIO",
+                "READ_PHONE_STATE",
+                "READ_CONTACTS "
+            ],
+            "versionCode": 2
         },
         "web": {
             "favicon": "./assets/favicon.png"

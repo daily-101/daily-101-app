@@ -25,7 +25,9 @@ export default function App() {
         const fonts = await cacheFonts([
             { NanumSquare_acL: require("./assets/fonts/NanumSquare_acL.ttf") },
             { NanumSquare_acR: require("./assets/fonts/NanumSquare_acR.ttf") },
-            { NanumSquare_acEB: require("./assets/fonts/NanumSquare_acEB.ttf") },
+            {
+                NanumSquare_acEB: require("./assets/fonts/NanumSquare_acEB.ttf"),
+            },
             { NanumSquare_acB: require("./assets/fonts/NanumSquare_acB.ttf") },
         ]);
         const images = await cacheImages([
@@ -42,7 +44,6 @@ export default function App() {
             require("./img/timeline_tap/spend.png"),
             require("./img/timeline_tap/walk.png"),
             require("./img/logo.png"),
-            require("./img/weather/Sun.png"),
             require("./img/weather/Clear.png"),
             require("./img/weather/Clouds.png"),
             require("./img/weather/Dust.png"),

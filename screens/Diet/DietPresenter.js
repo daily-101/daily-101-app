@@ -23,7 +23,7 @@ const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 const { height: HEIGHT } = Dimensions.get("window");
 
 export default (props) => {
-    const { date, setDate, data, setData } = props;
+    const { date, setDate, data, setData, uid } = props;
     let totalCal = 0;
     console.log(data);
     data.map((d) => (totalCal += Number(d.calories)));
@@ -40,7 +40,7 @@ export default (props) => {
 
     const submitDiet = () => {
         const postData = {
-            userId: 100970667093919960712,
+            userId: uid,
             filename: filename + ".jpg",
             calories: calories,
             foodName: foodName,
@@ -52,7 +52,7 @@ export default (props) => {
             imgUrl: result.uri,
         };
         axios
-            .post("http://210.107.78.156:9004/api/food/", postData)
+            .post("http://52.79.107.5:9004/api/food/", postData)
             .then(console.log("food success"))
             .then(uploadImage(result.uri))
             .then(console.log("upload success"))
@@ -137,39 +137,37 @@ export default (props) => {
                 <Image
                     style={styles.logo}
                     source={require("../../img/logo.png")}
-                /> 
-                 {/**header weather */}
-                 {isLoading ? null : (
+                />
+                {/**header weather */}
+                {isLoading ? null : (
                     <View style={styles.weather}>
                         <Weather temp={Math.round(temp)} condition="Clear" />
                     </View>
-                )}    
-                 {/**header userIcon */}
-                 <Image
-                style={styles.userIcon}
-                source={{
-                    uri:
-                        "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
-                }}
+                )}
+                {/**header userIcon */}
+                <Image
+                    style={styles.userIcon}
+                    source={{
+                        uri:
+                            "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
+                    }}
                 />
             </View>
-                   
+
             <View style={styles.topContainer}>
-                 {/**DatePicker */}
+                {/**DatePicker */}
                 <Text style={styles.dateText}>
-                            {moment(date).format("MMMM D, YYYY")}
-                        </Text>            
-                    {/**datePicker underArrow */}
-                    <TouchableOpacity
-                        onPress={showDatePicker}
-                    >
-                        <AntDesign
-                            style={styles.underArrow}
-                            name="down"
-                            size={20}
-                            color="black"
-                        />
-                    </TouchableOpacity>                                 
+                    {moment(date).format("MMMM D, YYYY")}
+                </Text>
+                {/**datePicker underArrow */}
+                <TouchableOpacity onPress={showDatePicker}>
+                    <AntDesign
+                        style={styles.underArrow}
+                        name="down"
+                        size={20}
+                        color="black"
+                    />
+                </TouchableOpacity>
             </View>
             {/**main header section end */}
             <View style={styles.dietContainer}>
@@ -249,7 +247,7 @@ export default (props) => {
                                 </View>
                                 <View style={styles.submitBtnSection}>
                                     <View style={styles.submitButton}>
-                                        <TouchableOpacity                                        
+                                        <TouchableOpacity
                                             onPress={onChooseImage}
                                         >
                                             <Text style={styles.submitText}>
@@ -258,15 +256,15 @@ export default (props) => {
                                         </TouchableOpacity>
                                     </View>
 
-                                    
                                     <TouchableOpacity
                                         style={styles.submitButton}
-                                        onPress={submitDiet}                                    >
-                                            <Text style={styles.submitText}>
-                                                등록하기
-                                            </Text>
-                                        </TouchableOpacity>                                    
-                                    </View>
+                                        onPress={submitDiet}
+                                    >
+                                        <Text style={styles.submitText}>
+                                            등록하기
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </Modal>
@@ -277,17 +275,15 @@ export default (props) => {
 };
 
 const styles = StyleSheet.create({
-
     //식단등록버튼section
-    submitBtnSection:{
-        backgroundColor:'white',
-        flexDirection:"row",
-        justifyContent:'center',
-        alignItems: 'center',
+    submitBtnSection: {
+        backgroundColor: "white",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
         // top:9,
-        height:57,
+        height: 57,
         // bottom:5,
-
     },
     //식단등록 버튼 text
     submitText: {
@@ -301,7 +297,7 @@ const styles = StyleSheet.create({
         lineHeight: 25,
         borderRadius: 20,
         backgroundColor: "rgb(245,245,245)",
-        justifyContent:'center',
+        justifyContent: "center",
     },
 
     buttonContainer: {
@@ -321,7 +317,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
     },
-
 
     inputPrice: {
         width: 100,
@@ -413,14 +408,14 @@ const styles = StyleSheet.create({
     },
     //main Header Style start
     //Header1
-    mainLogo:{
-        height:50,
-        width:"100%",
-        flexDirection:"row",
-        justifyContent:'space-between',
-        alignItems: 'center',
+    mainLogo: {
+        height: 50,
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
         // left:20,
-        backgroundColor:'#f5f5f5',
+        backgroundColor: "#f5f5f5",
         // top:10,
     },
     //Logo
@@ -442,7 +437,7 @@ const styles = StyleSheet.create({
         // position: "absolute",
         // backgroundColor:"gold",
         // top: 11,
-        left:70,
+        left: 70,
         // right:20,
     },
     //User Login Icon
@@ -453,24 +448,24 @@ const styles = StyleSheet.create({
         // position: "absolute",
         right: 20,
         // top: 10,
-    }, 
-    
+    },
+
     //header2
     topContainer: {
-        height:90,
+        height: 90,
         // width: 230,
-        flexDirection:"row",
-        // justifyContent:'space-between',  
-        justifyContent:'center',  
-        alignItems: 'center',
-        backgroundColor:'white',
-        textAlign:'center',
+        flexDirection: "row",
+        // justifyContent:'space-between',
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+        textAlign: "center",
     },
 
     //header2-datePicker
     //dateAllConcept
     dateStyle: {
-        backgroundColor:"blue",
+        backgroundColor: "blue",
         // width:200,
         // width: "100%",
         // justifyContent:'space-around',
@@ -480,10 +475,10 @@ const styles = StyleSheet.create({
         // top: 12,
     },
     //date Text
-    dateText:{        
+    dateText: {
         fontSize: 20,
         // fontWeight: "bold",
-        color:"black",
+        color: "black",
         fontFamily: "NanumSquare_acEB",
         // left:20,
         // right:5,
@@ -492,7 +487,7 @@ const styles = StyleSheet.create({
     underArrow: {
         // top: 0,
         left: 2,
-        color:'black',
+        color: "black",
     },
     //main Header Style end
 });

@@ -31,8 +31,10 @@ export default () => {
 
     const getTimeline = async () => {
         const data = await axios
-            .get(`http://210.107.78.156:9001/api/timeline/${date}/${cur.uid}`)
-            // .get(`http://210.107.78.156:9009/api/timeline/${date}/${cur.uid}`)
+            .get(`http://52.79.107.5:9001/api/timeline/${date}/${cur.uid}`)
+            // .get(
+            //     `http://52.79.107.5:9001/api/timeline/${date}/105191400324450530000`
+            // )
             .then(function (response) {
                 const convertData = response.data?.map((s) => ({
                     id: s.id,

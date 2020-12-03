@@ -24,7 +24,7 @@ const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
 const { height: HEIGHT } = Dimensions.get("window");
 
 export default (props) => {
-    const { date, setDate, spendData, setData, allCost, getSpendList } = props;
+    const { date, setDate, spendData, setData, allCost, uid } = props;
     let totalCost = 0;
     spendData.map((data) => (totalCost += Number(data.cost)));
 
@@ -125,20 +125,19 @@ export default (props) => {
 
     const submitSpend = () => {
         const postData = {
-            userId: 100970667093919960712,
-            // userId: 100970667093919960000,
-            // userId: uid,
+            // userId: 105191400324450530000,
+            userId: uid,
             category: tab,
             spendName: place,
             cost: price,
         };
         axios
-            .post("http://210.107.78.156:9003/api/spending/", postData)
+            .post("http://52.79.107.5:9003/api/spending/", postData)
             .then(setData([...spendData, postData]))
             .then(function (response) {
                 Alert.alert("소비내역이 등록되었습니다.");
             })
-            .then(getSpendList())
+            // .then(getSpendList())
             .then(setModalVisible(!modalVisible));
         // .then(setData([...data, newData]))
     };
@@ -156,45 +155,43 @@ export default (props) => {
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
             />
-             {/**main header section start */}
-             <View style={styles.mainLogo}>
+            {/**main header section start */}
+            <View style={styles.mainLogo}>
                 {/**header logo */}
                 <Image
                     style={styles.logo}
                     source={require("../../img/logo.png")}
-                /> 
-                 {/**header weather */}
-                 {isLoading ? null : (
+                />
+                {/**header weather */}
+                {isLoading ? null : (
                     <View style={styles.weather}>
                         <Weather temp={Math.round(temp)} condition="Clear" />
                     </View>
-                )}    
-                 {/**header userIcon */}
-                 <Image
-                style={styles.userIcon}
-                source={{
-                    uri:
-                        "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
-                }}
+                )}
+                {/**header userIcon */}
+                <Image
+                    style={styles.userIcon}
+                    source={{
+                        uri:
+                            "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
+                    }}
                 />
             </View>
-                   
+
             <View style={styles.topContainer}>
-                 {/**DatePicker */}
+                {/**DatePicker */}
                 <Text style={styles.dateText}>
-                            {moment(date).format("MMMM D, YYYY")}
-                        </Text>            
-                    {/**datePicker underArrow */}
-                    <TouchableOpacity
-                        onPress={showDatePicker}
-                    >
-                        <AntDesign
-                            style={styles.underArrow}
-                            name="down"
-                            size={20}
-                            color="black"
-                        />
-                    </TouchableOpacity>                                 
+                    {moment(date).format("MMMM D, YYYY")}
+                </Text>
+                {/**datePicker underArrow */}
+                <TouchableOpacity onPress={showDatePicker}>
+                    <AntDesign
+                        style={styles.underArrow}
+                        name="down"
+                        size={20}
+                        color="black"
+                    />
+                </TouchableOpacity>
             </View>
             {/**main header section end */}
             {selectedTab ? (
@@ -497,9 +494,7 @@ export default (props) => {
                                 />
                             </View>
                             <TouchableOpacity
-                                style={
-                                    styles.submitButton
-                                }
+                                style={styles.submitButton}
                                 onPress={submitSpend}
                             >
                                 <Text style={styles.submitText}>등록하기!</Text>
@@ -584,12 +579,12 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     submitContainer: {
-        backgroundColor:'white',
-        flexDirection:"row",
-        justifyContent:'center',
-        alignItems: 'center',
+        backgroundColor: "white",
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
         // top:9,
-        height:57,
+        height: 57,
     },
     submitText: {
         color: "black",
@@ -601,7 +596,7 @@ const styles = StyleSheet.create({
         lineHeight: 25,
         borderRadius: 20,
         backgroundColor: "rgb(245,245,245)",
-        justifyContent:'center',
+        justifyContent: "center",
     },
     allText: {
         fontSize: 12,
@@ -679,16 +674,16 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         flex: 1,
     },
- //main Header Style start
+    //main Header Style start
     //Header1
-    mainLogo:{
-        height:50,
-        width:"100%",
-        flexDirection:"row",
-        justifyContent:'space-between',
-        alignItems: 'center',
+    mainLogo: {
+        height: 50,
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
         // left:20,
-        backgroundColor:'#f5f5f5',
+        backgroundColor: "#f5f5f5",
         // top:10,
     },
     //Logo
@@ -710,7 +705,7 @@ const styles = StyleSheet.create({
         // position: "absolute",
         // backgroundColor:"gold",
         // top: 11,
-        left:70,
+        left: 70,
         // right:20,
     },
     //User Login Icon
@@ -721,24 +716,24 @@ const styles = StyleSheet.create({
         // position: "absolute",
         right: 20,
         // top: 10,
-    }, 
-    
+    },
+
     //header2
     topContainer: {
-        height:90,
+        height: 90,
         // width: 230,
-        flexDirection:"row",
-        // justifyContent:'space-between',  
-        justifyContent:'center',  
-        alignItems: 'center',
-        backgroundColor:'white',
-        textAlign:'center',
+        flexDirection: "row",
+        // justifyContent:'space-between',
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "white",
+        textAlign: "center",
     },
 
     //header2-datePicker
     //dateAllConcept
     dateStyle: {
-        backgroundColor:"blue",
+        backgroundColor: "blue",
         // width:200,
         // width: "100%",
         // justifyContent:'space-around',
@@ -748,10 +743,10 @@ const styles = StyleSheet.create({
         // top: 12,
     },
     //date Text
-    dateText:{        
+    dateText: {
         fontSize: 20,
         // fontWeight: "bold",
-        color:"black",
+        color: "black",
         fontFamily: "NanumSquare_acEB",
         // left:20,
         // right:5,
@@ -760,7 +755,7 @@ const styles = StyleSheet.create({
     underArrow: {
         // top: 0,
         left: 2,
-        color:'black',
+        color: "black",
     },
     //main Header Style end
 });

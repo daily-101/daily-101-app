@@ -33,9 +33,10 @@ export default () => {
 
     const getDiet = async () => {
         await axios
-            .get(
-                `http://210.107.78.156:9004/api/food/${date}/100970667093919960712`
-            )
+            .get(`http://52.79.107.5:9004/api/food/${date}/${cur.uid}`)
+            // .get(
+            //     `http://52.79.107.5:9004/api/food/${date}/105191400324450530000`
+            // )
             .then(function (response) {
                 setData(response.data);
             });
@@ -82,7 +83,10 @@ export default () => {
         getDiet();
     }, [date]);
     useEffect(() => {
-        getDiet();
+        current();
+        if (loading) {
+            getDiet();
+        }
     }, []);
     return (
         <DietPresenter
@@ -90,6 +94,7 @@ export default () => {
             setData={setData}
             date={date}
             setDate={setDate}
+            uid={cur ? cur.uid : ""}
         />
     );
 };

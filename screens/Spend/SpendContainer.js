@@ -8,6 +8,7 @@ export default () => {
     const [spendData, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [allCost, setAllCost] = useState([]);
+    const [cur, setCur] = useState({});
 
     const current = async () => {
         const user = await GoogleSignIn.getCurrentUser();
@@ -17,14 +18,22 @@ export default () => {
 
     const getSpendList = async () => {
         const data = await axios
-            .get(
-                `http://210.107.78.156:9003/api/spending/${date}/100970667093919960712`
-            )
+            // .get(
+            //     `http://52.79.107.5:9003/api/spending/${date}/105191400324450530000`
+            // )
+            .get(`http://52.79.107.5:9003/api/spending/${date}/${cur.uid}`)
             .then(function (response) {
                 setData(response.data);
                 convertData(response.data);
             });
     };
+    useEffect(() => {
+        current();
+        if (loading) {
+            getSpendList();
+        }
+    }, []);
+
     useEffect(() => {
         getSpendList();
     }, [date]);
@@ -55,6 +64,7 @@ export default () => {
             date={date}
             setDate={setDate}
             getSpendList={getSpendList}
+            uid={cur ? cur.uid : ""}
         />
     );
 };

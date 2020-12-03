@@ -25,9 +25,6 @@ const images = {
     Smoke: {
         uri: require("../img/weather/Smoke.png"),
     },
-    Sun: {
-        uri: require("../img/weather/Sun.png"),
-    },
     Thunderstorm: {
         uri: require("../img/weather/Thunderstorm.png"),
     },
@@ -46,7 +43,14 @@ export default function Weather({ temp, condition }) {
                 source={images[condition]?.uri}
                 // source={require("../img/weather/Clear.png")}
             />
-            <Text style={{ lineHeight: 23, marginLeft: 5, fontSize: 17, color: "gray" }}>
+            <Text
+                style={{
+                    lineHeight: 23,
+                    marginLeft: 5,
+                    fontSize: 17,
+                    color: "gray",
+                }}
+            >
                 {temp}°C
             </Text>
         </View>
@@ -55,9 +59,9 @@ export default function Weather({ temp, condition }) {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: "row", 
-        justifyContent:'center',  
-        alignItems: 'center',
-        left:10
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        left: 10,
     },
 });

@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, Dimensions, Image } from "react-native";
+import {
+    Text,
+    View,
+    StyleSheet,
+    Dimensions,
+    Image,
+    TouchableOpacity,
+} from "react-native";
 import Timeline from "react-native-timeline-flatlist";
 import { AntDesign } from "@expo/vector-icons";
-import {
-    ScrollView,
-    TextInput,
-    TouchableOpacity,
-} from "react-native-gesture-handler";
+import { ScrollView, TextInput } from "react-native-gesture-handler";
 import * as Location from "expo-location";
 import axios from "axios";
 import { Alert } from "react-native";
@@ -146,8 +149,8 @@ export default (props) => {
             // console.log("위치", location);
             // console.log("주소", addr);
             const postData = {
-                userId: 105191400324450530000,
-                // userId: uid,
+                // userId: 105191400324450530000,
+                userId: uid,
                 address: addr,
                 latitude: location.latitude,
                 longitude: location.longitude,
@@ -161,7 +164,7 @@ export default (props) => {
                 longitude: Location.longitude,
             };
             axios
-                .post("http://210.107.78.156:9001/api/timeline/", postData)
+                .post("http://52.79.107.5:9001/api/timeline/", postData)
                 .then(setData([...data, newData]))
                 .then(function (response) {
                     Alert.alert("현재위치가 등록되었습니다.");
@@ -181,8 +184,8 @@ export default (props) => {
 
         const modifyData = {
             id: selected.id,
-            userId: 105191400324450530000,
-            // userId: uid,
+            // userId: 105191400324450530000,
+            userId: uid,
             address: selected.description,
             placeName: place,
             latitude: selected.latitude,
@@ -190,7 +193,7 @@ export default (props) => {
             distance: 0.0,
         };
         axios
-            .put("http://210.107.78.156:9001/api/timeline/", modifyData)
+            .put("http://52.79.107.5:9001/api/timeline/", modifyData)
             .then(function (response) {
                 console.log("put 성공");
             });
@@ -517,7 +520,7 @@ const styles = StyleSheet.create({
     container: {
         fontFamily: "NanumSquare_acL",
         // flex: 1,
-        height: 370,
+        height: HEIGHT - 238,
         backgroundColor: "white",
         width: "100%",
         // flexDirection: "row",
