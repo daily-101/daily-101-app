@@ -20,17 +20,11 @@
         },
         "android": {
             "package": "com.daily101",
-            "googleServicesFile": "./google-services.json",
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"
             },
-            "permissions": [
-                "CAMERA",
-                "RECORD_AUDIO",
-                "READ_PHONE_STATE",
-                "READ_CONTACTS "
-            ],
+            "permissions": ["CAMERA", "RECORD_AUDIO", "READ_PHONE_STATE", "READ_CONTACTS "],
             "versionCode": 2
         },
         "web": {

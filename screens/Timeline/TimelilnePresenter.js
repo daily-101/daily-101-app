@@ -1,30 +1,22 @@
-import React, { useEffect, useState } from "react";
-import {
-    Text,
-    View,
-    StyleSheet,
-    Dimensions,
-    Image,
-    TouchableOpacity,
-} from "react-native";
-import Timeline from "react-native-timeline-flatlist";
-import { AntDesign } from "@expo/vector-icons";
-import { ScrollView, TextInput } from "react-native-gesture-handler";
-import * as Location from "expo-location";
-import axios from "axios";
-import { Alert } from "react-native";
-import Weather from "../../components/weather";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import moment from "moment";
-import { GoogleAuthData } from "expo-google-sign-in";
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, Dimensions, Image, TouchableOpacity } from 'react-native';
+import Timeline from 'react-native-timeline-flatlist';
+import { AntDesign } from '@expo/vector-icons';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import * as Location from 'expo-location';
+import axios from 'axios';
+import { Alert } from 'react-native';
+import Weather from '../../components/weather';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import moment from 'moment';
 
-const API_KEY = "f32d3ba57242e98dad9a1c4348095ab2";
+const API_KEY = 'f32d3ba57242e98dad9a1c4348095ab2';
 
-const { height: HEIGHT } = Dimensions.get("window");
+const { height: HEIGHT } = Dimensions.get('window');
 
 export default (props) => {
     const { date, setDate, data, setData, uid, weather } = props;
-    const [addr, setAddr] = useState("");
+    const [addr, setAddr] = useState('');
 
     // const [cur, setCur] = useState({});
 
@@ -50,7 +42,7 @@ export default (props) => {
 
     const convertData = data.map((s) => ({
         id: s.id,
-        time: moment(s.date).format("kk:mm"),
+        time: moment(s.date).format('kk:mm'),
         title: s.title,
         description: s.placeName,
         latitude: s.latitude,
@@ -59,8 +51,8 @@ export default (props) => {
 
     const [selected, setSelected] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [condition, setCondition] = useState("");
-    const [temp, setTemp] = useState("");
+    const [condition, setCondition] = useState('');
+    const [temp, setTemp] = useState('');
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [location, setLocation] = useState({});
     const [isLocation, setIsLocation] = useState(false);
@@ -118,7 +110,7 @@ export default (props) => {
             reverseGeo(latitude, longitude);
             getWeather(latitude, longitude);
         } catch (error) {
-            Alert.alert("Can't find", "So sad");
+            Alert.alert("Can't find", 'So sad');
         }
     };
 
@@ -157,30 +149,26 @@ export default (props) => {
                 distance: 0.0,
             };
             const newData = {
-                time: moment(new Date()).format("kk:mm"),
-                title: " ",
+                time: moment(new Date()).format('kk:mm'),
+                title: ' ',
                 description: addr,
                 latitude: Location.latitude,
                 longitude: Location.longitude,
             };
             axios
-                .post("http://52.79.107.5:9001/api/timeline/", postData)
+                .post('http://52.79.107.5:9001/api/timeline/', postData)
                 .then(setData([...data, newData]))
                 .then(function (response) {
-                    Alert.alert("현재위치가 등록되었습니다.");
+                    Alert.alert('현재위치가 등록되었습니다.');
                 });
         }
     };
 
-    const [place, setPlace] = useState("");
+    const [place, setPlace] = useState('');
 
     const changePlace = (selected) => {
         // console.log(selected);
-        setData(
-            data.map((item) =>
-                item.id === selected.id ? { ...item, title: place } : item
-            )
-        );
+        setData(data.map((item) => (item.id === selected.id ? { ...item, title: place } : item)));
 
         const modifyData = {
             id: selected.id,
@@ -192,14 +180,12 @@ export default (props) => {
             longitude: selected.longitude,
             distance: 0.0,
         };
-        axios
-            .put("http://52.79.107.5:9001/api/timeline/", modifyData)
-            .then(function (response) {
-                console.log("put 성공");
-            });
+        axios.put('http://52.79.107.5:9001/api/timeline/', modifyData).then(function (response) {
+            console.log('put 성공');
+        });
 
         setSelected(null);
-        setPlace("");
+        setPlace('');
     };
 
     const renderSelected = () => {
@@ -215,10 +201,7 @@ export default (props) => {
                         onChangeText={(text) => setPlace(text)}
                         value={place}
                     />
-                    <TouchableOpacity
-                        onPress={() => changePlace(selected)}
-                        style={styles.inputButton}
-                    >
+                    <TouchableOpacity onPress={() => changePlace(selected)} style={styles.inputButton}>
                         <Text style={styles.inputText}>장소 입력</Text>
                     </TouchableOpacity>
                 </View>
@@ -235,9 +218,7 @@ export default (props) => {
         if (rowData.description) {
             desc = (
                 <View style={styles.descriptionContainer}>
-                    <Text style={styles.textDescription}>
-                        {rowData.description}
-                    </Text>
+                    <Text style={styles.textDescription}>{rowData.description}</Text>
                 </View>
             );
         }
@@ -261,10 +242,7 @@ export default (props) => {
             {/**main header section start */}
             <View style={styles.mainLogo}>
                 {/**header logo */}
-                <Image
-                    style={styles.logo}
-                    source={require("../../img/logo.png")}
-                />
+                <Image style={styles.logo} source={require('../../img/logo.png')} />
                 {/**header weather */}
                 {isLoading ? null : (
                     <View style={styles.weather}>
@@ -275,25 +253,17 @@ export default (props) => {
                 <Image
                     style={styles.userIcon}
                     source={{
-                        uri:
-                            "https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg",
+                        uri: 'https://cdnb.pikicast.com/200/2017/03/31/200_364017_1490932388.jpeg',
                     }}
                 />
             </View>
 
             <View style={styles.topContainer}>
                 {/**DatePicker */}
-                <Text style={styles.dateText}>
-                    {moment(date).format("MMMM D, YYYY")}
-                </Text>
+                <Text style={styles.dateText}>{moment(date).format('MMMM D, YYYY')}</Text>
                 {/**datePicker underArrow */}
                 <TouchableOpacity onPress={showDatePicker}>
-                    <AntDesign
-                        style={styles.underArrow}
-                        name="down"
-                        size={20}
-                        color="black"
-                    />
+                    <AntDesign style={styles.underArrow} name="down" size={20} color="black" />
                 </TouchableOpacity>
             </View>
             {/**main header section end */}
@@ -355,13 +325,13 @@ export default (props) => {
                         titleStyle={{ marginTop: -14 }}
                         timeContainerStyle={{ minWidth: 50, marginTop: -10 }}
                         timeStyle={{
-                            textAlign: "center",
-                            color: "gray",
+                            textAlign: 'center',
+                            color: 'gray',
                             padding: 5,
                             borderRadius: 13,
                         }}
                         // showTime={false}
-                        descriptionStyle={{ color: "gray" }}
+                        descriptionStyle={{ color: 'gray' }}
                         options={{
                             style: { paddingTop: 5 },
                         }}
@@ -372,10 +342,7 @@ export default (props) => {
                     />
                 </View>
                 <View style={styles.submitBtnSection}>
-                    <TouchableOpacity
-                        style={styles.submitButton}
-                        onPress={submitLocation}
-                    >
+                    <TouchableOpacity style={styles.submitButton} onPress={submitLocation}>
                         <Text style={styles.submitText}>현재위치등록</Text>
                     </TouchableOpacity>
                 </View>
@@ -386,8 +353,8 @@ export default (props) => {
 const styles = StyleSheet.create({
     //장소입력 버튼 text
     inputText: {
-        color: "black",
-        textAlign: "center",
+        color: 'black',
+        textAlign: 'center',
     },
     //장소입력 버튼
     inputButton: {
@@ -396,8 +363,8 @@ const styles = StyleSheet.create({
         right: 20,
         lineHeight: 25,
         borderRadius: 20,
-        backgroundColor: "rgb(245,245,245)",
-        justifyContent: "center",
+        backgroundColor: 'rgb(245,245,245)',
+        justifyContent: 'center',
     },
     //장소입력 창
     inputPlace: {
@@ -411,26 +378,26 @@ const styles = StyleSheet.create({
     //장소입력 section
     inputContainer: {
         // backgroundColor:"red",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         height: 60,
     },
 
     //현재위치등록버튼section
     submitBtnSection: {
-        backgroundColor: "white",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         // top:9,
         height: 57,
         // bottom:5,
     },
     //현재위치등록등록 버튼 text
     submitText: {
-        color: "black",
-        textAlign: "center",
+        color: 'black',
+        textAlign: 'center',
     },
     //현재위치등록 버튼
     submitButton: {
@@ -438,20 +405,20 @@ const styles = StyleSheet.create({
         height: 25,
         lineHeight: 25,
         borderRadius: 20,
-        backgroundColor: "rgb(245,245,245)",
-        justifyContent: "center",
+        backgroundColor: 'rgb(245,245,245)',
+        justifyContent: 'center',
     },
 
     //main Header Style start
     //Header1
     mainLogo: {
         height: 50,
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         // left:20,
-        backgroundColor: "#f5f5f5",
+        backgroundColor: '#f5f5f5',
         // top:10,
     },
     //Logo
@@ -476,28 +443,28 @@ const styles = StyleSheet.create({
     topContainer: {
         height: 90,
         // width: 230,
-        flexDirection: "row",
+        flexDirection: 'row',
         // justifyContent:'space-between',
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "white",
-        textAlign: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        textAlign: 'center',
     },
 
     //header2-datePicker
     //dateAllConcept
     dateStyle: {
-        backgroundColor: "blue",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: 'blue',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         // top: 12,
     },
     //date Text
     dateText: {
         fontSize: 20,
-        color: "black",
-        fontFamily: "NanumSquare_acEB",
+        color: 'black',
+        fontFamily: 'NanumSquare_acEB',
         // left:20,
         // right:5,
     },
@@ -505,7 +472,7 @@ const styles = StyleSheet.create({
     underArrow: {
         // top: 0,
         left: 2,
-        color: "black",
+        color: 'black',
     },
     //main Header Style end
 
@@ -518,11 +485,11 @@ const styles = StyleSheet.create({
     },
     //timeline Section
     container: {
-        fontFamily: "NanumSquare_acL",
+        fontFamily: 'NanumSquare_acL',
         // flex: 1,
         height: HEIGHT - 238,
-        backgroundColor: "white",
-        width: "100%",
+        backgroundColor: 'white',
+        width: '100%',
         // flexDirection: "row",
         // justifyContent: "center",
         // alignItems: "center",
@@ -534,7 +501,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         // marginTop: 5,
-        backgroundColor: "white",
+        backgroundColor: 'white',
         // left:20,
         // right:20,
         // width:"100%",
@@ -542,15 +509,15 @@ const styles = StyleSheet.create({
     //timeline spot
     title: {
         fontSize: 16,
-        fontWeight: "bold",
-        fontFamily: "NanumSquare_acL",
-        color: "red",
+        fontWeight: 'bold',
+        fontFamily: 'NanumSquare_acL',
+        color: 'red',
     },
     //
     descriptionContainer: {
-        flexDirection: "row",
+        flexDirection: 'row',
         // paddingRight: 50,
-        color: "gold",
+        color: 'gold',
     },
     image: {
         width: 50,
@@ -564,22 +531,22 @@ const styles = StyleSheet.create({
     //main icon box
     card: {
         marginLeft: 23,
-        backgroundColor: "white",
+        backgroundColor: 'white',
         width: 75,
         height: 75,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
         borderRadius: 5,
         borderWidth: 1,
-        borderColor: "black",
+        borderColor: 'black',
     },
     //main icon Group
     cardContainer: {
-        flexDirection: "row", //row로 정렬
+        flexDirection: 'row', //row로 정렬
         // position: "absolute",
         elevation: 3,
         // top: 160,
-        backgroundColor: "gray",
+        backgroundColor: 'gray',
         // left: 30,
     },
 });

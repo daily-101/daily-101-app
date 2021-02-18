@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Component } from "react";
-import TimelilnePresenter from "./TimelilnePresenter";
-import axios from "axios";
-import moment from "moment";
-import * as GoogleSignIn from "expo-google-sign-in";
+import React, { useEffect, useState } from 'react';
+import { Component } from 'react';
+import TimelilnePresenter from './TimelilnePresenter';
+import axios from 'axios';
+import moment from 'moment';
 
 export default () => {
     const [data, setData] = useState([]);
@@ -12,14 +11,7 @@ export default () => {
     const [weather, setWeather] = useState({});
     const [cur, setCur] = useState({});
 
-    const current = async () => {
-        const user = await GoogleSignIn.getCurrentUser();
-        setCur(user);
-        setLoading(true);
-    };
-
     useEffect(() => {
-        current();
         if (loading) {
             getTimeline();
         }
@@ -38,7 +30,7 @@ export default () => {
             .then(function (response) {
                 const convertData = response.data?.map((s) => ({
                     id: s.id,
-                    time: moment(s.date).format("kk:mm"),
+                    time: moment(s.date).format('kk:mm'),
                     title: s.placeName,
                     description: s.address,
                     latitude: s.latitude,
@@ -47,25 +39,13 @@ export default () => {
 
                 setData(convertData);
                 setWeather({
-                    condition:
-                        response.data[response.data.length - 1].cur_weather,
-                    temper: (
-                        response.data[response.data.length - 1].cur_temper - 273
-                    ).toFixed(1),
+                    condition: response.data[response.data.length - 1].cur_weather,
+                    temper: (response.data[response.data.length - 1].cur_temper - 273).toFixed(1),
                 });
 
                 // console.log(response.data[response.data.length - 1]);
             });
     };
     // console.log(weather);
-    return (
-        <TimelilnePresenter
-            weather={weather}
-            data={data}
-            date={date}
-            setDate={setDate}
-            setData={setData}
-            uid={cur ? cur.uid : ""}
-        />
-    );
+    return <TimelilnePresenter weather={weather} data={data} date={date} setDate={setDate} setData={setData} uid={cur ? cur.uid : ''} />;
 };

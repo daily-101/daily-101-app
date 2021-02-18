@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
-import SpendPresenter from "./SpendPresenter";
-import * as GoogleSignIn from "expo-google-sign-in";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import SpendPresenter from './SpendPresenter';
+import axios from 'axios';
 
 export default () => {
     const [date, setDate] = useState(new Date());
@@ -9,12 +8,6 @@ export default () => {
     const [loading, setLoading] = useState(false);
     const [allCost, setAllCost] = useState([]);
     const [cur, setCur] = useState({});
-
-    const current = async () => {
-        const user = await GoogleSignIn.getCurrentUser();
-        setCur(user);
-        setLoading(true);
-    };
 
     const getSpendList = async () => {
         const data = await axios
@@ -28,7 +21,6 @@ export default () => {
             });
     };
     useEffect(() => {
-        current();
         if (loading) {
             getSpendList();
         }
@@ -41,13 +33,13 @@ export default () => {
     const convertData = (data) => {
         let tmpList = [0, 0, 0, 0, 0];
         data.map((tmp) => {
-            if (tmp.category === "식비") {
+            if (tmp.category === '식비') {
                 tmpList[0] += tmp.cost;
-            } else if (tmp.category === "패션/미용") {
+            } else if (tmp.category === '패션/미용') {
                 tmpList[1] += tmp.cost;
-            } else if (tmp.category === "교육") {
+            } else if (tmp.category === '교육') {
                 tmpList[2] += tmp.cost;
-            } else if (tmp.category === "문화생활") {
+            } else if (tmp.category === '문화생활') {
                 tmpList[3] += tmp.cost;
             } else {
                 tmpList[4] += tmp.cost;
@@ -64,7 +56,7 @@ export default () => {
             date={date}
             setDate={setDate}
             getSpendList={getSpendList}
-            uid={cur ? cur.uid : ""}
+            uid={cur ? cur.uid : ''}
         />
     );
 };
